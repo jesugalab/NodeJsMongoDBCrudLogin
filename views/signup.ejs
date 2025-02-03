@@ -1,0 +1,19 @@
+<% include partials/_header %>
+<div class="col-md-5">
+  <div class="card">
+    <div class="card-body">
+<form action="/signup" method="POST">
+  <input type="email" name="email" placeholder="Email">
+  <input type="password" name="password" placeholder="Password">
+  <button class="btn btn-primary" type="submit">
+    SignUp
+  </button>
+</form>
+</div>
+</div></div>
+
+<%if (signupMessage) {%>
+  <p style="color:#FF0000;"><%= signupMessage %></p>
+<% } %>
+<% include partials/_footer %>
+
