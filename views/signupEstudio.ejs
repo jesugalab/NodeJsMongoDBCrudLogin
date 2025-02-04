@@ -1,16 +1,13 @@
 <% include partials/_header %>
-<H2>Crear Cuenta Nueva</H2>
+<H2>Crear Estuido Nuevo</H2>
       <div class="col-md-5">
         <div class="card">
           <div class="card-body">
-            <form action="/signup" method="POST">
-              <input type="email" name="email" placeholder="Email">
-              <input type="password" name="password" placeholder="Password">
+            <form action="/signupEstudio" method="POST">
               <input type="text" name="nombre" placeholder="nombre">
-              <input type="text" name="apellidos" placeholder="apellidos">
-              <input type="text" name="rol" placeholder="rol">
+              <input type="text" name="tipo" placeholder="tipo">
               <button class="btn btn-primary" type="submit">
-                Crear Cuenta
+                Crear Estudio
               </button>
             </form>
           </div>

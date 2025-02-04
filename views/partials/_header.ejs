@@ -30,6 +30,7 @@
                 <a class="nav-link" href="/signup">Signup</a>
               </li> -->
               <% } else { %>
+                <%if (user.rol.toLowerCase() == "admin") {%>
               <li class="nav-item active">
                 <a class="nav-link" href="/tasks">Tareas</span></a>
               </li>
@@ -39,11 +40,12 @@
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" 
                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Dropdown
+                  Insertar
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="#">Action</a>
-                  <a class="dropdown-item" href="#">Another action</a>
+                  <a class="dropdown-item" href="/signup">Añadir usuario</a>
+                  <a class="dropdown-item" href="/signupAsignatura">Añadir asignatura</a>
+                  <a class="dropdown-item" href="/signupEstudio">Añadir estudio</a>
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="#">Something else here</a>
                 </div>
@@ -51,6 +53,14 @@
               <li class="nav-item">
                 <a class="nav-link" href="/logout">Log out</a>
               </li>
+                <% } else { %>
+                  <%if (user.rol.toLowerCase() == "profesor") {%>
+                  
+
+
+
+                  <% } %>
+                <% } %>
               <% } %>
           </ul>
           <% if (user) { %>
