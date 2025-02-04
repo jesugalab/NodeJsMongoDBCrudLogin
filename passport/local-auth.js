@@ -17,9 +17,9 @@ passport.use('local-signup', new LocalStrategy({
   passwordField: 'password',
   passReqToCallback: true
 }, async (req, email, password, done) => {
-  var user = new User();
-   user = await user.findEmail( email)
-  if(user) {
+  var userRep = new User();
+  userRep = await userRep.findEmail( email)
+  if(userRep) {
     return done(null, false, req.flash('signupMessage', 'The Email is already Taken.'));
   } else {
     const { nombre, apellidos, rol } = req.body; // Extraer de req.body
@@ -32,7 +32,7 @@ passport.use('local-signup', new LocalStrategy({
     await newUser.insert()
   .then(result => console.log(result))
   .catch(error => console.log(error));
-    done(null, newUser);
+    done(null, req.user, req.flash('signupMessage', 'The Email is already Taken.')); // es mantiene en la misma pagina
   }
 }));
 
