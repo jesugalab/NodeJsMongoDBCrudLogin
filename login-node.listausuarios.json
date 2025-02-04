@@ -1,0 +1,88 @@
+[{
+  "_id": {
+    "$oid": "67a22a2b95b036fdc68dde02"
+  },
+  "email": "b@b.com",
+  "password": "$2a$10$a03M60iKEXkE7wVMwHDIeu2VRCgDAHsEWpCM/aFstqIsZpUDyvrEu",
+  "nombre": "Jesús",
+  "apellidos": "Galán",
+  "rol": "admin",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67a2311d1f83f01eca117b3e"
+  },
+  "email": "x@x.com",
+  "nombre": "Jesús",
+  "apellidos": "Galán",
+  "rol": "admin",
+  "password": "$2a$10$w0Oh0LaaP9jNjho6Cx7TruZcromdHXrwZHDyd97TxQ9QsdeLYmVv6",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67a2334fb08d7c6c214ca325"
+  },
+  "email": "m@m.com",
+  "nombre": "Jesús",
+  "apellidos": "Galán",
+  "rol": "admin",
+  "password": "$2a$10$8bAZ3hKp7Nsy4fehb4zYruueLjQJqjrC69X1cvO1ABaWfp8I3/4oW",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67a23b5522ff0a04b2201f44"
+  },
+  "email": "p@p.com",
+  "nombre": "Juan",
+  "apellidos": "Galán",
+  "rol": "alumno",
+  "password": "$2a$10$wz1tLjJEgntn3dGVLb1OmunU7MHorG3LyoQEK66jvvDQadPDYjqQ.",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67a23c0422ff0a04b2201f4e"
+  },
+  "email": "a@a.com",
+  "nombre": "Juan",
+  "apellidos": "Brasal",
+  "rol": "alumno",
+  "password": "$2a$10$PiZFMf9HyNOjJycwaW3kjePmBI13gx5mzqM8TOPIUkLfQKbdKeUQi",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67a24501bd1c07c66457ab40"
+  },
+  "email": "fff@f.com",
+  "nombre": "f",
+  "apellidos": "f",
+  "rol": "alumno",
+  "password": "$2a$10$Tm4F1nHP0..7aOIQfpS6cueT8KQGl28kBF7x.mTyUYKETcKiKc312",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67a24576ce7e92621d513e8a"
+  },
+  "email": "c@c.com",
+  "nombre": "cc",
+  "apellidos": "ccc",
+  "rol": "profesor",
+  "password": "$2a$10$xZhXnDXRKeaP2.4qGhPZ5ueL6LNYXbWH6W2r6xzDaPYl7SkZSoIKW",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67a247faea5567be1f2f1e02"
+  },
+  "email": "qq@aa.com",
+  "nombre": "qq",
+  "apellidos": "qq",
+  "rol": "alumno",
+  "password": "$2a$10$Vbd9r4WLXv7pCSgafQ5ZzOB2eqLzBOmCkSRLH37y3PxAuIals9EFa",
+  "__v": 0
+}]
