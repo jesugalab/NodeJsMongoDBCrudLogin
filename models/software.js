@@ -19,7 +19,7 @@ const sofwareSchema = Schema({
 
 
 softwareSchema.methods.findAll= async function (software) {
-  const Sof = mongoose.model("listaSoftware", softwareSchema);
+  const Software = mongoose.model("listaSoftware", softwareSchema);
   return await Software.find({'software':software}) 
   .then(result => {return result})
   .catch(error => console.log(error));

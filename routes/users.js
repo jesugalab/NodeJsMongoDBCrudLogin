@@ -2,7 +2,7 @@ const router = require('express').Router();
 const passport = require('passport');
 
 router.get('/', (req, res, next) => {
-  res.render('index');
+  res.render('signin');
 });
 
 router.get('/signup', (req, res, next) => {
@@ -11,7 +11,7 @@ router.get('/signup', (req, res, next) => {
 
 router.post('/signup', passport.authenticate('local-signup', {
   successRedirect: '/profile',
-  failureRedirect: '/signup',
+  failureRedirect: '/profile',
   failureFlash: true
 })); 
 
