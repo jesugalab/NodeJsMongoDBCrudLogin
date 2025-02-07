@@ -37,31 +37,6 @@ router.get('/logout', (req, res, next) => {
   }); 
 });
 
-router.get('/signupAsignatura', (req, res, next) => {
-  res.render('signupAsignatura', {
-      signupMessage: req.flash('signupMessage')
-  });
-});
-
-
-
-router.post('/signupAsignatura', (req, res, next) => {
-  const { nombre, curso, estudio } = req.body;
-
-  // Validar que todos los campos requeridos estén presentes
-  if (!nombre || !curso || !estudio) {
-      req.flash('signupMessage', 'Por favor, completa todos los campos.');
-      return res.redirect('/signupAsignatura'); // Redirigir de vuelta al formulario con mensaje
-  }
-
-  // Si la validación es exitosa, proceder con la autenticación
-  passport.authenticate('local-signupAsignatura', {
-      successRedirect: '/profile',
-      failureRedirect: '/signupAsignatura',
-      failureFlash: true
-  })(req, res, next);
-});
-
 
 router.get('/signupEstudio', (req, res, next) => {
   res.render('signupEstudio', {
