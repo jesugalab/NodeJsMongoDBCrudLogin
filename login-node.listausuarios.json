@@ -1,25 +1,33 @@
 [{
   "_id": {
-    "$oid": "67a22a2b95b036fdc68dde02"
-  },
-  "email": "b@b.com",
-  "password": "$2a$10$a03M60iKEXkE7wVMwHDIeu2VRCgDAHsEWpCM/aFstqIsZpUDyvrEu",
-  "nombre": "Todos",
-  "apellidos": "Jugamos",
-  "rol": "admin",
-  "__v": 0
-},
-
-{
-  "_id": {
-    "$oid": "67a25c4d2cc4c59166a91c04"
+    "$oid": "67a7ba860661bbb0775f564f"
   },
   "email": "a@a.com",
-  "nombre": "Todos",
-  "apellidos": "Jugamos",
+  "nombre": "Jesús",
+  "apellidos": "Galán",
   "rol": "admin",
-  "password": "$2a$10$4RaggGfCrQvgue6bxVc/3ugJ1h6H7tPSw0ocrCbUIuGcVVDyhUuje",
+  "password": "$2a$10$Cy1fIvdA8gunNsbjr720G.bSIKTnlRk35iikGUd1PR/2CQh0NagIC",
   "__v": 0
-}
-]
-
+},
+{
+  "_id": {
+    "$oid": "67a7bad40661bbb0775f5659"
+  },
+  "email": "b@b.com",
+  "nombre": "Profe",
+  "apellidos": "Garcia",
+  "rol": "profesor",
+  "password": "$2a$10$6F1a5gDf7j9dbU7FPiT91OKCyA0ERo7sjR1tJNTUG2njPyow0vMWu",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67a7bb280661bbb0775f565f"
+  },
+  "email": "c@c.com",
+  "nombre": "Mi alumno",
+  "apellidos": "Cabrón",
+  "rol": "alumno",
+  "password": "$2a$10$JXXIbbeW5vwlgidZd9Uc9e3JCGp7IuKI3Xl7iAJZOMlVnx54dST1W",
+  "__v": 0
+}]
