@@ -1,3 +1,5 @@
+Para que funcione hay que añadir la IP desde la que te conectas en el atlas de Mongo https://cloud.mongodb.com/
+Sino seguir en local (keys.js) URI: 'mongodb://localhost:27017/login-node'
 
 Alumno :
 - mostrar asignaturas
