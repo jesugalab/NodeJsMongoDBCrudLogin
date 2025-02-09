@@ -20,7 +20,7 @@ passport.use('local-signup', new LocalStrategy({
   var userRep = new User();
   userRep = await userRep.findEmail( email)
   if(userRep) {
-    return done(null, false, req.flash('signupMessage', 'The Email is already Taken.'));
+    return done(null, false, req.flash('signupMessage', 'Error de Autentificacion.'));
   } else {
     const { nombre, apellidos, rol } = req.body; // Extraer de req.body
     const newUser = new User();
@@ -32,7 +32,7 @@ passport.use('local-signup', new LocalStrategy({
     await newUser.insert()
   .then(result => console.log(result))
   .catch(error => console.log(error));
-    done(null, req.user, req.flash('signupMessage', 'The Email is already Taken.')); // es mantiene en la misma pagina
+    done(null, req.user, req.flash('signupMessage',  'Error de Autentificacion.')); // es mantiene en la misma pagina
   }
 }));
 

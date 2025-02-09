@@ -1,24 +1,38 @@
 <% include partials/_header %>
-<H2>Crear Cuenta Nueva</H2>
-      <div class="col-md-5">
-        <div class="card">
-          <div class="card-body">
-            <form action="/signup" method="POST">
-              <input type="email" name="email" placeholder="Email">
-              <input type="password" name="password" placeholder="Password">
-              <input type="text" name="nombre" placeholder="nombre">
-              <input type="text" name="apellidos" placeholder="apellidos">
-              <input type="text" name="rol" placeholder="rol">
-              <button class="btn btn-primary" type="submit">
-                Crear Cuenta
-              </button>
-            </form>
-          </div>
-        </div>
-      </div>
 
-<%if (signupMessage) {%>
-  <p style="color:#FF0000;"><%= signupMessage %></p>
+<H2>Crear Cuenta Nueva</H2>
+<div class="col-md-5">
+    <div class="card">
+        <div class="card-body">
+            <form action="/signup" method="POST">
+              <p> 
+                <input type="text" name="nombre" placeholder="Nombre" required>
+                <input type="text" name="apellidos" placeholder="Apellidos" required>
+              </p>
+            <p>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="password" placeholder="Password" required>
+            </p>
+            <p>
+                <!-- Desplegable para seleccionar el rol -->
+                <select name="rol" required>
+                    <option value="alumno">Alumno</option>
+                    <option value="profesor">Profesor</option>
+                    <option value="admin">Admin</option>
+                </select>
+                <button class="btn btn-primary" type="submit">
+                    Crear Cuenta
+                </button>
+              </p>
+            </form>
+        </div>
+    </div>
+</div>
+
+<% if (signupMessage) { %>
+    <p style="color:#FF0000;"><%= signupMessage %></p>
 <% } %>
+
 <% include partials/_footer %>
+
 

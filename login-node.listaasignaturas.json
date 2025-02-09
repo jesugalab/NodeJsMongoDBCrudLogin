@@ -1,0 +1,13 @@
+[{
+  "_id": {
+    "$oid": "67a93ad2481455eef85d0aec"
+  },
+  "nombre": "Acesso a datos",
+  "curso": 2,
+  "estudio_id": {
+    "$oid": "67a91cddd7cf6e5d2038977e"
+  },
+  "listaAlumnos": [],
+  "listaProfesores": [],
+  "__v": 0
+}]

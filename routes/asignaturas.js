@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Asignatura = require('../models/asignatura'); // Corregí el nombre del modelo
+const Estudio = require('../models/estudio'); // Modelo de estudios
+
 
 // Middleware isAuthenticated definido directamente aquí
 const isAuthenticated = (req, res, next) => {
@@ -10,9 +12,26 @@ const isAuthenticated = (req, res, next) => {
   res.redirect('/'); // Si no está autenticado, redirige al inicio
 };
 
-// Ruta para mostrar el formulario de creación de asignaturas
-router.get('/signupAsignatura', isAuthenticated, (req, res) => {
-  res.render('signupAsignatura'); // Renderiza la vista signupAsignaturas.ejs
+// Ruta para mostrar todas las asignaturas
+router.get('/asignaturas', isAuthenticated, async (req, res) => {
+  try {
+    const asignaturas = await Asignatura.find(); // Obtener todos las asignaturas
+    res.render('asignaturas', { user: req.user, asignaturas, messages: req.flash() });
+  } catch (error) {
+    console.error('Error obteniendo las asignaturas:', error);
+    res.status(500).send('Error al cargar las asignaturas');
+  }
+});
+
+// Ruta para mostrar el formulario de creación de asignaturas con los estudios
+router.get('/signupAsignatura', isAuthenticated, async (req, res) => {
+  try {
+    const estudios = await Estudio.find(); // Obtener todos los estudios
+    res.render('signupAsignatura', { estudios, messages: req.flash() });
+  } catch (error) {
+    console.error('Error obteniendo los estudios en  formulario de creación de asignaturas:', error);
+    res.status(500).send('Error al cargar los estudios en formulario de creación de asignaturas');
+  }
 });
 
 // Ruta para procesar el formulario de creación de asignaturas
@@ -25,14 +44,12 @@ router.post('/signupAsignatura', isAuthenticated, async (req, res) => {
       nombre,
       curso,
       estudio_id,
-      usuario: req.user._id // Asigna el ID del usuario autenticado
     });
 
     // Guarda la asignatura en la base de datos
     await nuevaAsignatura.save();
-
-    // Redirige al usuario a la página de perfil o a la lista de asignaturas
-    res.redirect('/profile');
+    req.flash('signupMessage', 'Asignatura Creada.'); // Guarda el mensaje flash
+    return res.redirect('/signupAsignatura'); // Redirige a la misma página
   } catch (error) {
     console.error('Error al crear la asignatura:', error);
     res.status(500).send('Error al crear la asignatura. Por favor, inténtalo de nuevo.');

@@ -1,0 +1,39 @@
+<% include partials/_header %>
+
+
+<div class="col-md-7 mx-auto">
+  <h2>Lista de Asignaturas</h2>
+  <table class="table table-bordered table-hover">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>curso</th>
+        <th>estudio_id</th>
+        <th>listaAlumnos</th>
+        <th>listaProfesores</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (asignaturas.length > 0) { %>
+        <% asignaturas.forEach(asignatura => { %>
+          <tr>
+            <td><%= asignatura._id %></td>
+            <td><%= asignatura.nombre %></td>
+            <td><%= asignatura.curso %></td>
+            <td><%= asignatura.estudio_id %></td>
+            <td><%= asignatura.listaAlumnos %></td>
+            <td><%= asignatura.listaProfesores %></td>
+          </tr>
+        <% }) %>
+      <% } else { %>
+        <tr>
+          <td colspan="3" class="text-center">No hay asignaturas registradas</td>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>
+</div>
+
+
+<% include partials/_footer %>

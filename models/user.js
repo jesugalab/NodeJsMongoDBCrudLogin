@@ -27,7 +27,7 @@ userSchema.methods.comparePassword= function (password) {
 };
 
 userSchema.methods.findEmail= async function (email)  {
-  const User = mongoose.model("listaUsuarios", userSchema);
+  const User = mongoose.model("listaUsuario", userSchema);
   return  await User.findOne({'email': email})
   .then(result => {return result})
   .catch(error => console.log(error));
@@ -41,7 +41,7 @@ userSchema.methods.insert= async function () {
   .then(result => console.log(result))
   .catch(error => console.log(error));
 };
-module.exports = mongoose.model('listaUsuarios', userSchema);
+module.exports = mongoose.model('listaUsuario', userSchema);
 
 
 
@@ -90,7 +90,7 @@ userSchema.methods.addAlumnoToAsignatura = async function (asignaturaId, alumnoI
   }
 
   const Asignatura = mongoose.model("listaAsignatura", AsignaturaSchema);
-  const User = mongoose.model("listaUsuarios", userSchema);
+  const User = mongoose.model("listaUsuario", userSchema);
 
   // Verificar si la asignatura existe
   const asignatura = await Asignatura.findById(asignaturaId);
@@ -124,7 +124,7 @@ userSchema.methods.addProfesorToAsignatura = async function (asignaturaId, profe
   }
 
   const Asignatura = mongoose.model("listaAsignatura", AsignaturaSchema);
-  const User = mongoose.model("listaUsuarios", userSchema);
+  const User = mongoose.model("listaUsuario", userSchema);
 
   // Verificar si la asignatura existe
   const asignatura = await Asignatura.findById(asignaturaId);

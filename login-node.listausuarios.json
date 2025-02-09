@@ -5,7 +5,7 @@
   "email": "a@a.com",
   "nombre": "Jesús",
   "apellidos": "Galán",
-  "rol": "admin",
+  "rol": "Admin",
   "password": "$2a$10$Cy1fIvdA8gunNsbjr720G.bSIKTnlRk35iikGUd1PR/2CQh0NagIC",
   "__v": 0
 },
@@ -16,7 +16,7 @@
   "email": "b@b.com",
   "nombre": "Profe",
   "apellidos": "Garcia",
-  "rol": "profesor",
+  "rol": "Profesor",
   "password": "$2a$10$6F1a5gDf7j9dbU7FPiT91OKCyA0ERo7sjR1tJNTUG2njPyow0vMWu",
   "__v": 0
 },
@@ -27,7 +27,7 @@
   "email": "c@c.com",
   "nombre": "Mi alumno",
   "apellidos": "Cabrón",
-  "rol": "alumno",
+  "rol": "Alumno",
   "password": "$2a$10$JXXIbbeW5vwlgidZd9Uc9e3JCGp7IuKI3Xl7iAJZOMlVnx54dST1W",
   "__v": 0
 }]

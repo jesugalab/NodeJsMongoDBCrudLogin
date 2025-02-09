@@ -54,11 +54,12 @@
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <%if (user.rol.toLowerCase() == "admin") {%>     
-                      <a class="dropdown-item" href="/users">Usuarios</a>
+                      <a class="dropdown-item" href="/usuarios">Usuarios</a>
+                      <a class="dropdown-item" href="/alumnos">Alumnos</a>
+                      <a class="dropdown-item" href="/profesores">Profesores</a>
                       <a class="dropdown-item" href="/estudios">Estudios</a>
                       <a class="dropdown-item" href="/asignaturas">Asignaturas</a>
-                      <a class="dropdown-item" href="/alumnos">Alumnos</a>
-                      <a class="dropdown-item" href="/software">Sofware</a>
+                     <a class="dropdown-item" href="/software">Sofware</a>
                     <% } else if (user.rol.toLowerCase() == "profesor") {%>
                       <a class="dropdown-item" href="/asignaturas">Asignaturas</a>
                       <a class="dropdown-item" href="/alumnos">Alumnos</a>

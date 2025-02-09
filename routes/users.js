@@ -1,6 +1,17 @@
 const router = require('express').Router();
 const passport = require('passport');
 
+
+
+// Middleware isAuthenticated definido directamente aquí
+const isAuthenticated = (req, res, next) => {
+  if (req.isAuthenticated()) { // Verifica si el usuario está autenticado
+    return next(); // Si está autenticado, continúa con la siguiente función
+  }
+  res.redirect('/'); // Si no está autenticado, redirige al inicio
+};
+
+
 router.get('/', (req, res, next) => {
   res.render('signin');
 });
@@ -10,8 +21,8 @@ router.get('/signup', (req, res, next) => {
 });
 
 router.post('/signup', passport.authenticate('local-signup', {
-  successRedirect: '/profile',
-  failureRedirect: '/profile',
+  successRedirect: '/signup',
+  failureRedirect: '/signup',
   failureFlash: true
 })); 
 
@@ -37,7 +48,7 @@ router.get('/logout', (req, res, next) => {
   }); 
 });
 
-
+/*
 router.get('/signupEstudio', (req, res, next) => {
   res.render('signupEstudio', {
       signupMessage: req.flash('signupMessage')
@@ -71,5 +82,5 @@ function isAuthenticated(req, res, next) {
 
   res.redirect('/')
 }
-
+*/
 module.exports = router;
