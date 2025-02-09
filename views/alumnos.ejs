@@ -1,0 +1,37 @@
+<% include partials/_header %>
+
+
+<div class="col-md-7 mx-auto">
+  <h2>Lista de Alumnnos</h2>
+  <table class="table table-bordered table-hover">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Apellidos</th>
+        <th>Correo</th>
+        <th>Rol</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (usuarios.length > 0) { %>
+        <% usuarios.forEach(usuario => { %>
+          <tr>
+            <td><%= usuario._id %></td>
+            <td><%= usuario.nombre %></td>
+            <td><%= usuario.apellidos %></td>
+            <td><%= usuario.email %></td>
+            <td><%= usuario.rol %></td>
+          </tr>
+        <% }) %>
+      <% } else { %>
+        <tr>
+          <td colspan="3" class="text-center">No hay alumnos registrados</td>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>
+</div>
+
+
+<% include partials/_footer %>

@@ -1,22 +1,33 @@
 <% include partials/_header %>
-<H2>Crear Asignatura Nueva</H2>
-      <div class="col-md-5">
-        <div class="card">
-          <div class="card-body">
+
+<h2>Crear Asignatura Nueva</h2>
+<div class="col-md-5">
+    <div class="card">
+        <div class="card-body">
             <form action="/signupAsignatura" method="POST">
-              <input type="text" name="nombre" placeholder="nombre">
-              <input type="number" name="curso" placeholder="curso">
-              <input type="text" name="estudio" placeholder="estudio">
-              <button class="btn btn-primary" type="submit">
-                Crear Asignatura
-              </button>
+                <p>
+                    <input type="text" name="nombre" placeholder="Nombre" required>
+                    <input type="number" name="curso" placeholder="Curso" required>
+                </p>
+                <p>
+                    <!-- Desplegable para seleccionar un estudio -->
+                    <select name="estudio_id" required>
+                        <% estudios.forEach(estudio => { %>
+                            <option value="<%= estudio._id %>"><%= estudio.nombre+" - "+estudio.tipo %></option>
+                        <% }) %>
+                    </select>
+
+                    <button class="btn btn-primary" type="submit">
+                        Crear Asignatura
+                    </button>
+                </p>
             </form>
-          </div>
         </div>
-      </div>
+    </div>
+</div>
 
-<%if (signupMessage) {%>
-  <p style="color:#FF0000;"><%= signupMessage %></p>
+<% if (signupMessage) { %>
+    <p style="color:#FF0000;"><%= signupMessage %></p>
 <% } %>
-<% include partials/_footer %>
 
+<% include partials/_footer %>

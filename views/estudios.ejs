@@ -1,0 +1,34 @@
+<% include partials/_header %>
+
+
+<div class="col-md-7 mx-auto">
+  <h2>Lista de Estudios</h2>
+  <table class="table table-bordered table-hover">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Tipo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (estudios.length > 0) { %>
+        <% estudios.forEach(estudio => { %>
+          <tr>
+            <td><%= estudio._id %></td>
+            <td><%= estudio.nombre %></td>
+            <td><%= estudio.tipo %></td>
+          </tr>
+        <% }) %>
+      <% } else { %>
+        <tr>
+          <td colspan="3" class="text-center">No hay estudios registrados</td>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>
+</div>
+
+
+
+<% include partials/_footer %>

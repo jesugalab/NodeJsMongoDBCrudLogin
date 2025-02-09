@@ -1,0 +1,16 @@
+[{
+  "_id": {
+    "$oid": "67a91cddd7cf6e5d2038977e"
+  },
+  "nombre": "DAM",
+  "tipo": "Grado Superior",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67a91f61039c677d753f97a5"
+  },
+  "nombre": "DAW",
+  "tipo": "Grado Superior",
+  "__v": 0
+}]
