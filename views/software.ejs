@@ -1,0 +1,33 @@
+<% include partials/_header %>
+
+<div class="col-md-7 mx-auto">
+  <h2>Lista de Software</h2>
+  <table class="table table-bordered table-hover">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Descripcion</th>
+        <th>Link</th>
+        <th>Asignatura</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (software.length > 0) { %>
+        <% software.forEach(software => { %>
+          <tr>
+            <td><%= software._id %></td>
+            <td><%= software.descripcion %></td>
+            <td><%= software.link %></td>
+            <td><%= software.asignatura.nombre %> - <%= software.asignatura.curso %></td>
+          </tr>
+        <% }) %>
+      <% } else { %>
+        <tr>
+          <td colspan="6" class="text-center">No hay Software registrado</td>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>
+</div>
+
+<% include partials/_footer %>

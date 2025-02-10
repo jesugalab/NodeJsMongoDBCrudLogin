@@ -1,0 +1,33 @@
+<% include partials/_header %>
+
+<h2>Crear Nuevo Software</h2>
+<div class="col-md-5">
+    <div class="card">
+        <div class="card-body">
+            <form action="/signupSoftware" method="POST">
+                <p>
+                    <input type="text" name="descripcion" placeholder="descripcion" required>
+                    <input type="text" name="link" placeholder="link" required>
+                </p>
+                <p>
+                    <!-- Desplegable para seleccionar un estudio -->
+                    <select name="asignatura_id" required>
+                        <% asignaturas.forEach(asignatura => { %>
+                            <option value="<%= asignatura._id %>"><%= asignatura.nombre+" - "+asignatura.curso %></option>
+                        <% }) %>
+                    </select>
+
+                    <button class="btn btn-primary" type="submit">
+                        Crear Asignatura
+                    </button>
+                </p>
+            </form>
+        </div>
+    </div>
+</div>
+
+<% if (signupMessage) { %>
+    <p style="color:#FF0000;"><%= signupMessage %></p>
+<% } %>
+
+<% include partials/_footer %>
