@@ -12,19 +12,24 @@ const isAuthenticated = (req, res, next) => {
   res.redirect('/'); // Si no está autenticado, redirige al inicio
 };
 
-// Ruta para listar las asignaturas con los nombres de los estudios
+
+// Ruta para listar las asignaturas con la información completa del estudio
 router.get('/asignaturas', isAuthenticated, async (req, res) => {
   try {
-    const asignaturas = await Asignatura.find(); // Obtener todas las asignaturas
-
-    // Obtener todos los estudios y convertirlos en un diccionario (objeto)
-    const estudios = await Estudio.find();
+    const asignaturas = await Asignatura.find().lean(); // Obtener todas las asignaturas
+    const estudios = await Estudio.find().lean(); // Obtener todos los estudios
+    // Crear un mapa de estudios por ID
     const estudiosMap = {};
     estudios.forEach(estudio => {
-      estudiosMap[estudio._id] = estudio; // Guardamos el estudio con su ID como clave
+      estudiosMap[estudio._id] = estudio;
     });
-    // Pasamos la lista de asignaturas y los estudios mapeados a la vista
-    res.render('asignaturas', { asignaturas, estudiosMap });
+    // Modificar cada asignatura para reemplazar estudio_id con el objeto completo del estudio
+    const asignaturasConEstudio = asignaturas.map(asignatura => ({
+      ...asignatura,
+      estudio: estudiosMap[asignatura.estudio_id] || { nombre: "No encontrado", tipo: "-" }
+    }));
+    // Pasar la nueva lista de asignaturas a la vista
+    res.render('asignaturas', { asignaturas: asignaturasConEstudio });
   } catch (error) {
     console.error('Error obteniendo las asignaturas:', error);
     res.status(500).send('Error al cargar las asignaturas');
