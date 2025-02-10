@@ -20,14 +20,7 @@
             <td><%= asignatura._id %></td>
             <td><%= asignatura.nombre %></td>
             <td><%= asignatura.curso %></td>
-
-            <!-- Verificamos si el estudio existe en el mapa -->
-            <% if (estudiosMap[asignatura.estudio_id]) { %>
-              <td><%= estudiosMap[asignatura.estudio_id].nombre %> - <%= estudiosMap[asignatura.estudio_id].tipo %></td>
-            <% } else { %>
-              <td>Estudio no encontrado</td>
-            <% } %>
-
+            <td><%= asignatura.estudio.nombre %> - <%= asignatura.estudio.tipo %></td>
             <td><%= asignatura.listaAlumnos.join(", ") %></td>
             <td><%= asignatura.listaProfesores.join(", ") %></td>
           </tr>

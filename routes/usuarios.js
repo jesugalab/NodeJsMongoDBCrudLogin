@@ -25,7 +25,7 @@ router.get('/usuarios', isAuthenticated, async (req, res) => {
 router.get('/profesores', isAuthenticated, async (req, res) => {
     try {
         const usuarios = await Usuario.find({ rol: "Profesor" }); // Obtener todos los profesores
-      res.render('usuarios', { user: req.user, usuarios, messages: req.flash() });
+      res.render('profesores', { user: req.user, usuarios, messages: req.flash() });
     } catch (error) {
       console.error('Error obteniendo los profesores:', error);
       res.status(500).send('Error al cargar los profesores');
@@ -36,7 +36,7 @@ router.get('/profesores', isAuthenticated, async (req, res) => {
 router.get('/alumnos', isAuthenticated, async (req, res) => {
     try {
       const usuarios = await Usuario.find({ rol: "Alumno" }); // Obtener todos los alumnos
-      res.render('usuarios', { user: req.user, usuarios, messages: req.flash() });
+      res.render('alumnos', { user: req.user, usuarios, messages: req.flash() });
     } catch (error) {
       console.error('Error obteniendo los alumnos:', error);
       res.status(500).send('Error al cargar los alumnos');
