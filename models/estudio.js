@@ -12,6 +12,12 @@ EstudioSchema.methods.findAll = async function () {
     .catch(error => console.log(error));
 };
 
+EstudioSchema.methods.findById = async function (id) {
+  return await Task.findById(id)
+    .then(result => {return result})
+    .catch(error => console.log(error));
+};
+
 EstudioSchema.methods.insert= async function () {
   return await this.save()
     .then(result => console.log(result))
