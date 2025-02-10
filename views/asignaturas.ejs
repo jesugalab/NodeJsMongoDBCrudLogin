@@ -1,6 +1,5 @@
 <% include partials/_header %>
 
-
 <div class="col-md-7 mx-auto">
   <h2>Lista de Asignaturas</h2>
   <table class="table table-bordered table-hover">
@@ -8,10 +7,10 @@
       <tr>
         <th>ID</th>
         <th>Nombre</th>
-        <th>curso</th>
-        <th>estudio_id</th>
-        <th>listaAlumnos</th>
-        <th>listaProfesores</th>
+        <th>Curso</th>
+        <th>Estudio</th>
+        <th>Lista Alumnos</th>
+        <th>Lista Profesores</th>
       </tr>
     </thead>
     <tbody>
@@ -21,19 +20,25 @@
             <td><%= asignatura._id %></td>
             <td><%= asignatura.nombre %></td>
             <td><%= asignatura.curso %></td>
-            <td><%= asignatura.estudio_id %></td>
-            <td><%= asignatura.listaAlumnos %></td>
-            <td><%= asignatura.listaProfesores %></td>
+
+            <!-- Verificamos si el estudio existe en el mapa -->
+            <% if (estudiosMap[asignatura.estudio_id]) { %>
+              <td><%= estudiosMap[asignatura.estudio_id].nombre %> - <%= estudiosMap[asignatura.estudio_id].tipo %></td>
+            <% } else { %>
+              <td>Estudio no encontrado</td>
+            <% } %>
+
+            <td><%= asignatura.listaAlumnos.join(", ") %></td>
+            <td><%= asignatura.listaProfesores.join(", ") %></td>
           </tr>
         <% }) %>
       <% } else { %>
         <tr>
-          <td colspan="3" class="text-center">No hay asignaturas registradas</td>
+          <td colspan="6" class="text-center">No hay asignaturas registradas</td>
         </tr>
       <% } %>
     </tbody>
   </table>
 </div>
-
 
 <% include partials/_footer %>
