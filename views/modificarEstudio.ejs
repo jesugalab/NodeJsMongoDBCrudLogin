@@ -1,0 +1,27 @@
+<% include partials/_header %>
+<H2>modu Estuido Nuevo</H2>
+      <div class="col-md-5">
+        <div class="card">
+          <div class="card-body">
+            <form action="/modificarEstudio" method="POST">
+            
+            <p>
+              <input type="text" name="nombre" placeholder="nombre">
+              <input type="text" name="tipo" placeholder="tipo">
+            </p>
+            <p>
+              
+              <button class="btn btn-primary" type="submit">
+                Crear Estudio
+              </button>
+            </p>
+            </form>
+          </div>
+        </div>
+      </div>
+
+<%if (signupMessage) {%>
+  <p style="color:#FF0000;"><%= signupMessage %></p>
+<% } %>
+<% include partials/_footer %>
+

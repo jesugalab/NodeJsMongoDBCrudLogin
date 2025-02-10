@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const sofwareSchema = Schema({
+const softwareSchema = Schema({
   
   descripcion: {
     type: String,
@@ -13,13 +13,13 @@ const sofwareSchema = Schema({
     required: true
   },
 
-  asignatura_id:  {type: mongoose.Schema.Types.ObjectId, ref:'listaAsignatura'}
+  asignatura_id:  {type: mongoose.Schema.Types.ObjectId, ref:'listaSofware'}
 
 });
 
 
 softwareSchema.methods.findAll= async function (software) {
-  const Software = mongoose.model("listaSoftware", softwareSchema);
+  const Software = mongoose.model("listaSofware", softwareSchema);
   return await Software.find({'software':software}) 
   .then(result => {return result})
   .catch(error => console.log(error));
