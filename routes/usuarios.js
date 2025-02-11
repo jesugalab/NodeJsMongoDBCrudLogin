@@ -56,7 +56,7 @@ router.get('/alumnos', isAuthenticatedAdminProf, async (req, res) => {
   });
 
     // Método para eliminar usuarios.
-    router.get('/usuarios/delete/:id', isAuthenticated, async (req, res, next) => {
+    router.get('/usuarios/delete/:id', isAuthenticatedAdmin, async (req, res, next) => {
       let { id } = req.params;
       await Usuario.findByIdAndDelete(id);
       res.redirect('/usuarios');
