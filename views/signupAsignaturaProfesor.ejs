@@ -1,0 +1,39 @@
+<% include partials/_header %>
+
+<h2>Edicion de las Asignaturas de Profesores</h2>
+<div class="col-md-5">
+    <div class="card">
+        <div class="card-body">
+            <form action="/signupAsignaturaProfesor" method="POST">
+                <p>
+                     <!-- Desplegable para seleccionar un Profesor -->
+                     <select name="usuario_id" required>
+                        <% usuarios.forEach(usuario => { %>
+                            <option value="<%= usuario._id %>"><%= usuario.nombre+" "+usuario.apellidos %></option>
+                        <% }) %>
+                    </select>
+                    <button class="btn btn-secondary" type="submit">
+                        Quitar Asignatura al Profesor
+                    </button>
+                </p>
+                <p>
+                    <!-- Desplegable para seleccionar una asignatura -->
+                    <select name="asignatura_id" required>
+                        <% asignaturas.forEach(asignatura => { %>
+                            <option value="<%= asignatura._id %>"><%= asignatura.nombre+" - "+asignatura.curso %></option>
+                        <% }) %>
+                    </select>
+                    <button class="btn btn-primary" type="submit">
+                        Agregar Asignatura al Profesor
+                    </button>
+                </p>
+            </form>
+        </div>
+    </div>
+</div>
+
+<% if (signupMessage) { %>
+    <p style="color:#FF0000;"><%= signupMessage %></p>
+<% } %>
+
+<% include partials/_footer %>
