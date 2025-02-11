@@ -135,23 +135,30 @@ router.get('/signupAsignaturaAlumno', isAuthenticated, async (req, res) => {
 router.post('/signupAsignaturaAlumno', isAuthenticated, async (req, res) => {
   const { usuario_id, asignatura_id} = req.body;
   try {
-   // añade el alumno a la asignatura
+   // añade el alumno a la asignatura si no está ya matriculado y sino lo elimina
     const asignatura = await Asignatura.findById(asignatura_id);
     if (!asignatura) {
         console.error("La asignatura no existe.");
         res.status(500).send('Error la matricular al Alumno en la Asignatura. Por favor, inténtalo de nuevo.');     
-      } else {
-      asignatura.listaAlumnos.push(usuario_id);
-    }
+      } else {    
+          let index = (asignatura.listaAlumnos.indexOf(usuario_id));
+          if (index !== -1) {
+            asignatura.listaAlumnos.splice(index, 1);
+            req.flash('signupMessage', 'Alumno Eliminado de la Asignatura.'); // Guarda el mensaje flash    
+        } else  {         
+            asignatura.listaAlumnos.push(usuario_id); 
+               req.flash('signupMessage', 'Alumno Matriculado en la Asignatura.'); // Guarda el mensaje flash 
+        }
+      }
     // Guarda la asignatura en la base de datos
     await asignatura.save();
-    req.flash('signupMessage', 'Alumno matriculado en la Asignatura.'); // Guarda el mensaje flash
     return res.redirect('/signupAsignaturaAlumno'); // Redirige a la misma página
   } catch (error) {
     console.error('Error la matricular al Alumno en la Asignatura:', error);
     res.status(500).send('Error la matricular al Alumno en la Asignatura. Por favor, inténtalo de nuevo.');
   }
 });
+
 
 // para agregar una asignatura a un profesor
 
@@ -177,15 +184,45 @@ router.post('/signupAsignaturaProfesor', isAuthenticated, async (req, res) => {
         console.error("La asignatura no existe.");
         res.status(500).send('Error la asignar al Porfesor en la Asignatura. Por favor, inténtalo de nuevo.');     
       } else {
-      asignatura.listaProfesores.push(usuario_id);
+        let index = (asignatura.listaProfesores.indexOf(usuario_id));
+        if (index !== -1) {
+          asignatura.listaProfesores.splice(index, 1);
+          req.flash('signupMessage', 'Profesor Eliminado de la Asignatura.'); // Guarda el mensaje flash    
+      } else  {         
+          asignatura.listaProfesores.push(usuario_id); 
+             req.flash('signupMessage', 'Profesor añadido a la Asignatura.'); // Guarda el mensaje flash 
+      }
     }
+    
     // Guarda la asignatura en la base de datos
     await asignatura.save();
-    req.flash('signupMessage', 'Profesor asignado a la Asignatura.'); // Guarda el mensaje flash
     return res.redirect('/signupAsignaturaProfesor'); // Redirige a la misma página
   } catch (error) {
     console.error('Error la asignar al Porfesor en la Asignatura:', error);
     res.status(500).send('Error la asignar al Porfesor en la Asignatura. Por favor, inténtalo de nuevo.');
+  }
+});
+
+
+// Ruta para procesar el formulario de eliminar asignaturas a un profesor
+router.post('/signupAsignaturaProfesor/eliminar/', isAuthenticated, async (req, res) => {
+  const { usuario_id, asignatura_id} = req.body;
+  try {
+   // añade el alumno a la asignatura
+    const asignatura = await Asignatura.findById(asignatura_id);
+    if (!asignatura) {
+        console.error("La asignatura no existe.");
+        res.status(500).send('Error la eliminar al Porfesor en la Asignatura. Por favor, inténtalo de nuevo.');     
+      } else {
+      asignatura.listaProfesores.deleteOne(usuario_id);
+    }
+    // Guarda la asignatura en la base de datos
+    await asignatura.save();
+    req.flash('signupMessage', 'Profesor eliminado de la Asignatura.'); // Guarda el mensaje flash
+    return res.redirect('/signupAsignaturaProfesor'); // Redirige a la misma página
+  } catch (error) {
+    console.error('Error la elimninar al Porfesor en la Asignatura:', error);
+    res.status(500).send('Error la eliminar al Porfesor en la Asignatura. Por favor, inténtalo de nuevo.');
   }
 });
 

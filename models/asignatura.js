@@ -65,4 +65,5 @@ AsignaturaSchema.methods.findSearch = async function (search, usuario) {
     .catch(error => console.log(error));
 };
 
+
 module.exports = mongoose.model('listaAsignatura', AsignaturaSchema);
