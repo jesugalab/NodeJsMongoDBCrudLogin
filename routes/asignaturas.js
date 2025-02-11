@@ -110,5 +110,11 @@ router.get('/asignaturas/delete/:id', isAuthenticatedAdmin, async (req, res) => 
     res.status(500).send('Error al eliminar la asignatura. Por favor, inténtalo de nuevo.');
   }
 });
+// Método para eliminar asignaturas.
+router.get('/asignaturas/delete/:id', isAuthenticated, async (req, res, next) => {
+  let { id } = req.params;
+  await Asignatura.findByIdAndDelete(id);
+  res.redirect('/asignaturas');
+});
 
 module.exports = router;

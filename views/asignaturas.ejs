@@ -11,6 +11,9 @@
         <th>Estudio</th>
         <th>Lista Alumnos</th>
         <th>Lista Profesores</th>
+        <% if (user.rol.toLowerCase() == "admin") { %> 
+          <th>Operaciones</th>
+        <% } %>
       </tr>
     </thead>
     <tbody>
@@ -25,11 +28,15 @@
               <td><%= asignatura.estudio.nombre %> - <%= asignatura.estudio.tipo %></td>
               <td><%= asignatura.listaAlumnos.join(", ") %></td>
               <td><%= asignatura.listaProfesores.join(", ") %></td>
+              <td>
+                <a href="/asignaturas/edit/<%= asignatura._id %>" class="btn btn-info">Edit</a>
+                <a href="/asignaturas/delete/<%= asignatura._id %>" class="btn btn-danger">Delete</a>
+              </td>
             </tr>
           <% }) %>
         <% } else { %>
           <tr>
-            <td colspan="6" class="text-center">No hay asignaturas registradas</td>
+            <td colspan="7" class="text-center">No hay asignaturas registradas</td>
           </tr>
         <% } %>
     
@@ -98,3 +105,4 @@
 </div>
 
 <% include partials/_footer %>
+
