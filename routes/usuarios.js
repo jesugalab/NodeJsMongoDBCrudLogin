@@ -10,6 +10,7 @@ const isAuthenticatedAdmin = (req, res, next) => {
   res.redirect('/'); // Si no está autenticado, redirige al inicio
 };
 
+
 // Middleware modificado para comprobar que el usuario está autenticado y es Admin o Profesor.
 const isAuthenticatedAdminProf = (req, res, next) => {
   if (req.isAuthenticated() && (req.user.rol.toLowerCase() === 'admin' || req.user.rol.toLowerCase() === 'profesor')) { 
@@ -56,7 +57,7 @@ router.get('/alumnos', isAuthenticatedAdminProf, async (req, res) => {
   });
 
     // Método para eliminar usuarios.
-    router.get('/usuarios/delete/:id', isAuthenticated, async (req, res, next) => {
+    router.get('/usuarios/delete/:id', isAuthenticatedAdmin, async (req, res, next) => {
       let { id } = req.params;
       await Usuario.findByIdAndDelete(id);
       res.redirect('/usuarios');
