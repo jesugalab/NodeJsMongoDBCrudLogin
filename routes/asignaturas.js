@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Asignatura = require('../models/asignatura'); // Corregí el nombre del modelo
 const Estudio = require('../models/estudio'); // Modelo de estudios
-
+const Usuario = require('../models/user'); // Modelo de usuarios
 
 // Middleware isAuthenticated definido directamente aquí
 const isAuthenticated = (req, res, next) => {
@@ -115,6 +115,78 @@ router.get('/asignaturas/delete/:id', isAuthenticated, async (req, res, next) =>
   let { id } = req.params;
   await Asignatura.findByIdAndDelete(id);
   res.redirect('/asignaturas');
+});
+
+
+// para agregar una asignatura a un alumno
+// Ruta para mostrar el formulario para añadir asignaturas a un alumno
+router.get('/signupAsignaturaAlumno', isAuthenticated, async (req, res) => {
+  try {
+    const usuarios = await Usuario.find({rol:"Alumno"}); // Obtener todos los alumnos
+    const asignaturas = await Asignatura.find(); // Obtener todos las asignaturas
+    res.render('signupAsignaturaAlumno', { usuarios: usuarios || [], asignaturas: asignaturas || [], messages: req.flash() });
+  } catch (error) {
+    console.error('Error obteniendo los  usuarios o asignaturas en formulario de añadir asignariras a alumno:', error);
+    res.status(500).send('Error al cargar  usuarios o asignaturas en formulario de añadir asignariras a alumno');
+  }
+});
+
+// Ruta para procesar el formulario de añadir asignaturas a un alumno
+router.post('/signupAsignaturaAlumno', isAuthenticated, async (req, res) => {
+  const { usuario_id, asignatura_id} = req.body;
+  try {
+   // añade el alumno a la asignatura
+    const asignatura = await Asignatura.findById(asignatura_id);
+    if (!asignatura) {
+        console.error("La asignatura no existe.");
+        res.status(500).send('Error la matricular al Alumno en la Asignatura. Por favor, inténtalo de nuevo.');     
+      } else {
+      asignatura.listaAlumnos.push(usuario_id);
+    }
+    // Guarda la asignatura en la base de datos
+    await asignatura.save();
+    req.flash('signupMessage', 'Alumno matriculado en la Asignatura.'); // Guarda el mensaje flash
+    return res.redirect('/signupAsignaturaAlumno'); // Redirige a la misma página
+  } catch (error) {
+    console.error('Error la matricular al Alumno en la Asignatura:', error);
+    res.status(500).send('Error la matricular al Alumno en la Asignatura. Por favor, inténtalo de nuevo.');
+  }
+});
+
+// para agregar una asignatura a un profesor
+
+// Ruta para mostrar el formulario para añadir asignaturas a un profesor
+router.get('/signupAsignaturaProfesor', isAuthenticated, async (req, res) => {
+  try {
+    const usuarios = await Usuario.find({ rol:"Profesor"}); // Obtener todos los Profesores
+    const asignaturas = await Asignatura.find(); // Obtener todos las asignaturas
+    res.render('signupAsignaturaProfesor', { usuarios: usuarios || [], asignaturas: asignaturas || [], messages: req.flash() });
+  } catch (error) {
+    console.error('Error obteniendo los  usuarios o asignaturas en formulario de añadir asignariras a alumno:', error);
+    res.status(500).send('Error al cargar  usuarios o asignaturas en formulario de añadir asignariras a alumno');
+  }
+});
+
+// Ruta para procesar el formulario de añadir asignaturas a un profesor
+router.post('/signupAsignaturaProfesor', isAuthenticated, async (req, res) => {
+  const { usuario_id, asignatura_id} = req.body;
+  try {
+   // añade el alumno a la asignatura
+    const asignatura = await Asignatura.findById(asignatura_id);
+    if (!asignatura) {
+        console.error("La asignatura no existe.");
+        res.status(500).send('Error la asignar al Porfesor en la Asignatura. Por favor, inténtalo de nuevo.');     
+      } else {
+      asignatura.listaProfesores.push(usuario_id);
+    }
+    // Guarda la asignatura en la base de datos
+    await asignatura.save();
+    req.flash('signupMessage', 'Profesor asignado a la Asignatura.'); // Guarda el mensaje flash
+    return res.redirect('/signupAsignaturaProfesor'); // Redirige a la misma página
+  } catch (error) {
+    console.error('Error la asignar al Porfesor en la Asignatura:', error);
+    res.status(500).send('Error la asignar al Porfesor en la Asignatura. Por favor, inténtalo de nuevo.');
+  }
 });
 
 module.exports = router;
