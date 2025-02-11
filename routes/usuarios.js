@@ -11,6 +11,14 @@ const isAuthenticatedAdmin = (req, res, next) => {
 };
 
 
+// Middleware isAuthenticated definido directamente aquí. Modificado para comprobar si el usuario es un Admin.
+const isAuthenticated = (req, res, next) => {
+  if (req.isAuthenticated()) { // Verifica si el usuario está autenticado
+    return next(); // Si está autenticado, continúa con la siguiente función
+  }
+  res.redirect('/'); // Si no está autenticado, redirige al inicio
+};
+
 // Middleware modificado para comprobar que el usuario está autenticado y es Admin o Profesor.
 const isAuthenticatedAdminProf = (req, res, next) => {
   if (req.isAuthenticated() && (req.user.rol.toLowerCase() === 'admin' || req.user.rol.toLowerCase() === 'profesor')) { 
