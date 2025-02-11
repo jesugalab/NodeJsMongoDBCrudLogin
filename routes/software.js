@@ -13,7 +13,7 @@ const isAuthenticated = (req, res, next) => {
 };
 
 
-// Ruta para listar los software con la información completa de la asignatura
+/*// Ruta para listar los software con la información completa de la asignatura
 router.get('/software', isAuthenticated, async (req, res) => {
   try {
     const asignaturas = await Asignatura.find().lean(); // Obtener todas las asignaturas
@@ -34,8 +34,25 @@ router.get('/software', isAuthenticated, async (req, res) => {
     console.error('Error obteniendo el software:', error);
     res.status(500).send('Error al cargar el software');
   }
-});
+});*/
+// Ruta para que los alumnos vean el software de sus asignaturas
+router.get('/software', isAuthenticated, async (req, res) => {
+  try {
+    if (req.user.rol.toLowerCase() == 'alumno'||req.user.rol.toLowerCase() == 'profesor') {
+      const software = await Software.findByAlumno(req.user._id);
+    res.render('software', { software });
+  
+    }else if (req.user.rol.toLowerCase() == 'admin') {
+      const software = await Software.findByAlumno(req.user._id);
+    res.render('software', { software });
+    }
+  } catch (error) {
+    console.error('Error obteniendo el software del alumno:', error);
+    res.status(500).send('Error al cargar el software del alumno');
+  }
 
+    
+});
 // Ruta para mostrar el formulario de creación de software con las asignaturas
 router.get('/signupSoftware', isAuthenticated, async (req, res) => {
   try {

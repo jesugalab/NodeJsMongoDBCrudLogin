@@ -60,6 +60,12 @@ softwareSchema.methods.findSearch= async function (search, usuario) {
   .then(result => {return result})
   .catch(error => console.log(error));
 };
+softwareSchema.statics.findByAlumno = async function(alumnoId) {
+  const Asignatura = mongoose.model('listaAsignatura');
+  const asignaturas = await Asignatura.find({ listaAlumnos: alumnoId }).select('_id');
+  const asignaturaIds = asignaturas.map(asignatura => asignatura._id);
+  return this.find({ asignatura_id: { $in: asignaturaIds } });
+};
 
 
 module.exports = mongoose.model('listaSoftware', softwareSchema);
