@@ -12,8 +12,16 @@ const isAuthenticated = (req, res, next) => {
   res.redirect('/'); // Si no está autenticado, redirige al inicio
 };
 
+// Middleware isAuthenticated modificado para comprobar que el usuario es un Admin.
+const isAuthenticatedAdmin = (req, res, next) => {
+  if (req.isAuthenticated() && req.user.rol.toLowerCase() === 'admin') { // Verifica si el usuario está autenticado y es un admin.
+    return next(); // Si está autenticado, continúa con la siguiente función
+  }
+  res.redirect('/'); // Si no está autenticado, redirige al inicio
+};
 
 // Ruta para listar las asignaturas con la información completa del estudio
+// ** Se usa por Amin, profesor y alumno.
 router.get('/asignaturas', isAuthenticated, async (req, res) => {
   try {
     const asignaturas = await Asignatura.find().lean(); // Obtener todas las asignaturas
@@ -37,7 +45,8 @@ router.get('/asignaturas', isAuthenticated, async (req, res) => {
 });
 
 // Ruta para mostrar el formulario de creación de asignaturas con los estudios
-router.get('/signupAsignatura', isAuthenticated, async (req, res) => {
+// ** Se usa por Admin.
+router.get('/signupAsignatura', isAuthenticatedAdmin, async (req, res) => {
   try {
     const estudios = await Estudio.find(); // Obtener todos los estudios
     res.render('signupAsignatura', { estudios, messages: req.flash() });
@@ -48,7 +57,8 @@ router.get('/signupAsignatura', isAuthenticated, async (req, res) => {
 });
 
 // Ruta para procesar el formulario de creación de asignaturas
-router.post('/signupAsignatura', isAuthenticated, async (req, res) => {
+// ** Se usa por Admin.
+router.post('/signupAsignatura', isAuthenticatedAdmin, async (req, res) => {
   const { nombre, curso, estudio_id } = req.body;
 
   try {
@@ -70,6 +80,7 @@ router.post('/signupAsignatura', isAuthenticated, async (req, res) => {
 });
 
 // Ruta para listar todas las asignaturas del usuario
+// Se usa por Admin, profesor y alumno.
 router.get('/asignaturas', isAuthenticated, async (req, res) => {
   try {
     // Busca las asignaturas del usuario autenticado
@@ -84,7 +95,8 @@ router.get('/asignaturas', isAuthenticated, async (req, res) => {
 });
 
 // Ruta para eliminar una asignatura
-router.get('/asignaturas/delete/:id', isAuthenticated, async (req, res) => {
+// Se usa por admin.
+router.get('/asignaturas/delete/:id', isAuthenticatedAdmin, async (req, res) => {
   try {
     const { id } = req.params;
 

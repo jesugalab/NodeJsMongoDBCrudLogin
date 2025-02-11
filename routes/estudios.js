@@ -2,12 +2,17 @@ const express = require('express');
 const router = express.Router();
 const Estudio = require('../models/estudio');
 
+// Middleware para comprbar que el usuario se ha conectado.
+// Como en esta clase todos los métodos solo pueden ser usados por Admins, voy a modificar el isAuthenticated original.
 const isAuthenticated = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    return next();
+  if (req.isAuthenticated() && req.user.rol.toLowerCase() === 'admin') {
+    return next(); // Si está autenticado, continúa con la siguiente función.
   }
-  res.redirect('/');
+  res.redirect('/'); // Si no se ha autenticado, lo redirige al inicio.
 };
+
+// Ruta para listar los estudios.
+// Esto solo puede ser visto por Admins. 
 router.get('/estudios', isAuthenticated, async (req, res) => {
   try {
     const estudios = await Estudio.find(); // Obtener todos los estudios
@@ -18,10 +23,14 @@ router.get('/estudios', isAuthenticated, async (req, res) => {
   }
 });
 
+// Ruta para renderizar la vista "singupEstudio".
+// Esto solo puede ser hecho por un Admin.
 router.get('/signupEstudio', isAuthenticated, (req, res) => {
   res.render('signupEstudio');
 });
 
+// Ruta para insertar un nuevo estudio introducido en la vista "singupEstudio".
+// Esto solo puede ser hecho por un Admin.
 router.post('/signupEstudio', isAuthenticated, async (req, res) => {
   const { nombre, tipo } = req.body;
 

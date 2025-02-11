@@ -14,6 +14,7 @@
       </tr>
     </thead>
     <tbody>
+
       <% if (user.rol.toLowerCase() == "admin") { %> 
         <% if (asignaturas.length > 0) { %>
           <% asignaturas.forEach(asignatura => { %>
@@ -91,7 +92,8 @@
           <td colspan="6" class="text-center">No hay asignaturas registradas</td>
         </tr>
       <% } %>
-    </tbody>
+    
+    </tbody>    
   </table>
 </div>
 
