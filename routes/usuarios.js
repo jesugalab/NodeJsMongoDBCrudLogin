@@ -42,5 +42,12 @@ router.get('/alumnos', isAuthenticated, async (req, res) => {
       res.status(500).send('Error al cargar los alumnos');
     }
   });
+
+    // Método para eliminar usuarios.
+    router.get('/usuarios/delete/:id', isAuthenticated, async (req, res, next) => {
+      let { id } = req.params;
+      await Usuario.findByIdAndDelete(id);
+      res.redirect('/usuarios');
+    });
   
 module.exports = router;

@@ -11,6 +11,9 @@
         <th>Apellidos</th>
         <th>Correo</th>
         <th>Rol</th>
+        <% if (user.rol.toLowerCase() == "admin") { %> 
+          <th>Operaciones</th>
+        <% } %>
       </tr>
     </thead>
     <tbody>
@@ -22,11 +25,15 @@
             <td><%= usuario.apellidos %></td>
             <td><%= usuario.email %></td>
             <td><%= usuario.rol %></td>
+            <td>
+              <a href="/usuarios/edit/<%= usuario._id %>" class="btn btn-info">Edit</a>
+              <a href="/usuarios/delete/<%= usuario._id %>" class="btn btn-danger">Delet</a>
+            </td>
           </tr>
         <% }) %>
       <% } else { %>
         <tr>
-          <td colspan="3" class="text-center">No hay usuarios registrados</td>
+          <td colspan="6" class="text-center">No hay usuarios registrados</td>
         </tr>
       <% } %>
     </tbody>
