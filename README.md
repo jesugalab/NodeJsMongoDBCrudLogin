@@ -1,6 +1,6 @@
 HACIENDO:
 
-- Jesus: Voy a mejorar signupAsignaturaProfesor y de alumno por lo que tambien tengo que modificar las rutas get de alumnos
+- Jesus: por ahora nada
 - David: 
 - Rodrigo:
 - Alvaro: 
