@@ -130,12 +130,12 @@ router.post('/signupAsignaturaAlumno', isAuthenticated, async (req, res) => {
     if (!asignatura) {
         console.error("La asignatura no existe.");
         res.status(500).send('Error la matricular al Alumno en la Asignatura. Por favor, inténtalo de nuevo.');     
-      } else {    
+} else {
           let index = (asignatura.listaAlumnos.indexOf(usuario_id));
           if (index !== -1) {
             asignatura.listaAlumnos.splice(index, 1);
             req.flash('signupMessage', 'Alumno Eliminado de la Asignatura.'); // Guarda el mensaje flash    
-        } else  {         
+        } else  {
             asignatura.listaAlumnos.push(usuario_id); 
                req.flash('signupMessage', 'Alumno Matriculado en la Asignatura.'); // Guarda el mensaje flash 
         }
@@ -178,7 +178,7 @@ router.post('/signupAsignaturaProfesor', isAuthenticated, async (req, res) => {
         if (index !== -1) {
           asignatura.listaProfesores.splice(index, 1);
           req.flash('signupMessage', 'Profesor Eliminado de la Asignatura.'); // Guarda el mensaje flash    
-      } else  {         
+      } else  {
           asignatura.listaProfesores.push(usuario_id); 
              req.flash('signupMessage', 'Profesor añadido a la Asignatura.'); // Guarda el mensaje flash 
       }
@@ -231,7 +231,8 @@ router.post('/asignaturas/edit/:id', isAuthenticatedAdmin, async (req, res) => {
   } catch (error) {
     console.error('Error al actualizar la asignatura:', error);
     res.status(500).send('Error al actualizar la asignatura.'); // Responde con un error 500 en caso de fallo
-
+  }
+});
 // Ruta para procesar el formulario de eliminar asignaturas a un profesor
 router.post('/signupAsignaturaProfesor/eliminar/', isAuthenticated, async (req, res) => {
   const { usuario_id, asignatura_id} = req.body;
@@ -240,7 +241,7 @@ router.post('/signupAsignaturaProfesor/eliminar/', isAuthenticated, async (req, 
     const asignatura = await Asignatura.findById(asignatura_id);
     if (!asignatura) {
         console.error("La asignatura no existe.");
-        res.status(500).send('Error la eliminar al Porfesor en la Asignatura. Por favor, inténtalo de nuevo.');     
+        res.status(500).send('Error la eliminar al Porfesor en la Asignatura. Por favor, inténtalo de nuevo.');
       } else {
       asignatura.listaProfesores.deleteOne(usuario_id);
     }
@@ -309,7 +310,5 @@ const cargarAsignaturasRegeneradaCompleta = async (req, res) => {
     return [];
   }
 };
-
-
 
 module.exports = router;

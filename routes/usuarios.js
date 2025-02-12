@@ -127,11 +127,4 @@ router.post('/usuarios/update/:id', isAuthenticated, async (req, res) => {
   }
 });
 
-function isAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.redirect('/'); // Redirige al login si no está autenticado
-}
-  
 module.exports = router;
