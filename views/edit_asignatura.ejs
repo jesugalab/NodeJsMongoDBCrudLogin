@@ -1,0 +1,37 @@
+<% include partials/_header %>
+
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-body"></div>
+      <h2>Editar Asignatura</h2>
+
+      <form action="/asignaturas/edit/<%= asignatura._id %>" method="POST">
+        <div class="mb-3">
+          <label class="form-label">Nombre</label>
+          <input type="text" class="form-control" name="nombre" value="<%= asignatura.nombre %>" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Curso</label>
+          <input type="number" class="form-control" name="curso" value="<%= asignatura.curso %>" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Estudio</label>
+          <select class="form-control" name="estudio_id" required>
+            <% estudios.forEach(estudio => { %>
+              <option value="<%= estudio._id %>" <%= estudio._id.toString() === asignatura.estudio_id.toString() ? 'selected' : '' %>>
+                <%= estudio.nombre %> - <%= estudio.tipo %>
+              </option>
+            <% }) %>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        <a href="/asignaturas" class="btn btn-secondary">Cancelar</a>
+      </form>
+    </div>
+  </div>
+</div>
+
+<% include partials/_footer %>
