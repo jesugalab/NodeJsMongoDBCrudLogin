@@ -25,19 +25,8 @@ const isAuthenticatedAdmin = (req, res, next) => {
 // ** Se usa por Amin, profesor y alumno.
 router.get('/asignaturas', isAuthenticated, async (req, res) => {
   try {
-    const asignaturas = await Asignatura.find().lean(); // Obtener todas las asignaturas
-    const estudios = await Estudio.find().lean(); // Obtener todos los estudios
-    // Crear un mapa de estudios por ID
-    const estudiosMap = {};
-    estudios.forEach(estudio => {
-      estudiosMap[estudio._id] = estudio;
-    });
-    // Modificar cada asignatura para reemplazar estudio_id con el objeto completo del estudio
-    const asignaturasConEstudio = asignaturas.map(asignatura => ({
-      ...asignatura,
-      estudio: estudiosMap[asignatura.estudio_id] || { nombre: "No encontrado", tipo: "-" }
-    }));
-    // Pasar la nueva lista de asignaturas a la vista
+    // Obtener todas las asignaturas con su estudio
+    const asignaturasConEstudio = await cargarAsignaturasConEstudio();
     res.render('asignaturas', { asignaturas: asignaturasConEstudio });
   } catch (error) {
     console.error('Error obteniendo las asignaturas:', error);
@@ -124,7 +113,7 @@ router.get('/asignaturas/delete/:id', isAuthenticated, async (req, res, next) =>
 router.get('/signupAsignaturaAlumno', isAuthenticated, async (req, res) => {
   try {
     const usuarios = await Usuario.find({rol:"Alumno"}); // Obtener todos los alumnos
-    const asignaturas = await Asignatura.find(); // Obtener todos las asignaturas
+    const asignaturas = await cargarAsignaturasConEstudio(); // Obtener todos las asignaturas con su estudio
     res.render('signupAsignaturaAlumno', { usuarios: usuarios || [], asignaturas: asignaturas || [], messages: req.flash() });
   } catch (error) {
     console.error('Error obteniendo los  usuarios o asignaturas en formulario de añadir asignariras a alumno:', error);
@@ -136,17 +125,23 @@ router.get('/signupAsignaturaAlumno', isAuthenticated, async (req, res) => {
 router.post('/signupAsignaturaAlumno', isAuthenticated, async (req, res) => {
   const { usuario_id, asignatura_id} = req.body;
   try {
-   // añade el alumno a la asignatura
+   // añade el alumno a la asignatura si no está ya matriculado y sino lo elimina
     const asignatura = await Asignatura.findById(asignatura_id);
     if (!asignatura) {
         console.error("La asignatura no existe.");
         res.status(500).send('Error la matricular al Alumno en la Asignatura. Por favor, inténtalo de nuevo.');     
-      } else {
-      asignatura.listaAlumnos.push(usuario_id);
-    }
+      } else {    
+          let index = (asignatura.listaAlumnos.indexOf(usuario_id));
+          if (index !== -1) {
+            asignatura.listaAlumnos.splice(index, 1);
+            req.flash('signupMessage', 'Alumno Eliminado de la Asignatura.'); // Guarda el mensaje flash    
+        } else  {         
+            asignatura.listaAlumnos.push(usuario_id); 
+               req.flash('signupMessage', 'Alumno Matriculado en la Asignatura.'); // Guarda el mensaje flash 
+        }
+      }
     // Guarda la asignatura en la base de datos
     await asignatura.save();
-    req.flash('signupMessage', 'Alumno matriculado en la Asignatura.'); // Guarda el mensaje flash
     return res.redirect('/signupAsignaturaAlumno'); // Redirige a la misma página
   } catch (error) {
     console.error('Error la matricular al Alumno en la Asignatura:', error);
@@ -154,13 +149,14 @@ router.post('/signupAsignaturaAlumno', isAuthenticated, async (req, res) => {
   }
 });
 
+
 // para agregar una asignatura a un profesor
 
 // Ruta para mostrar el formulario para añadir asignaturas a un profesor
 router.get('/signupAsignaturaProfesor', isAuthenticated, async (req, res) => {
   try {
     const usuarios = await Usuario.find({ rol:"Profesor"}); // Obtener todos los Profesores
-    const asignaturas = await Asignatura.find(); // Obtener todos las asignaturas
+    const asignaturas = await cargarAsignaturasConEstudio(); // Obtener todos las asignaturas con su estudio
     res.render('signupAsignaturaProfesor', { usuarios: usuarios || [], asignaturas: asignaturas || [], messages: req.flash() });
   } catch (error) {
     console.error('Error obteniendo los  usuarios o asignaturas en formulario de añadir asignariras a alumno:', error);
@@ -178,11 +174,18 @@ router.post('/signupAsignaturaProfesor', isAuthenticated, async (req, res) => {
         console.error("La asignatura no existe.");
         res.status(500).send('Error la asignar al Porfesor en la Asignatura. Por favor, inténtalo de nuevo.');     
       } else {
-      asignatura.listaProfesores.push(usuario_id);
+        let index = (asignatura.listaProfesores.indexOf(usuario_id));
+        if (index !== -1) {
+          asignatura.listaProfesores.splice(index, 1);
+          req.flash('signupMessage', 'Profesor Eliminado de la Asignatura.'); // Guarda el mensaje flash    
+      } else  {         
+          asignatura.listaProfesores.push(usuario_id); 
+             req.flash('signupMessage', 'Profesor añadido a la Asignatura.'); // Guarda el mensaje flash 
+      }
     }
+    
     // Guarda la asignatura en la base de datos
     await asignatura.save();
-    req.flash('signupMessage', 'Profesor asignado a la Asignatura.'); // Guarda el mensaje flash
     return res.redirect('/signupAsignaturaProfesor'); // Redirige a la misma página
   } catch (error) {
     console.error('Error la asignar al Porfesor en la Asignatura:', error);
@@ -228,6 +231,51 @@ router.post('/asignaturas/edit/:id', isAuthenticatedAdmin, async (req, res) => {
   } catch (error) {
     console.error('Error al actualizar la asignatura:', error);
     res.status(500).send('Error al actualizar la asignatura.'); // Responde con un error 500 en caso de fallo
+
+// Ruta para procesar el formulario de eliminar asignaturas a un profesor
+router.post('/signupAsignaturaProfesor/eliminar/', isAuthenticated, async (req, res) => {
+  const { usuario_id, asignatura_id} = req.body;
+  try {
+   // añade el alumno a la asignatura
+    const asignatura = await Asignatura.findById(asignatura_id);
+    if (!asignatura) {
+        console.error("La asignatura no existe.");
+        res.status(500).send('Error la eliminar al Porfesor en la Asignatura. Por favor, inténtalo de nuevo.');     
+      } else {
+      asignatura.listaProfesores.deleteOne(usuario_id);
+    }
+    // Guarda la asignatura en la base de datos
+    await asignatura.save();
+    req.flash('signupMessage', 'Profesor eliminado de la Asignatura.'); // Guarda el mensaje flash
+    return res.redirect('/signupAsignaturaProfesor'); // Redirige a la misma página
+  } catch (error) {
+    console.error('Error la elimninar al Porfesor en la Asignatura:', error);
+    res.status(500).send('Error la eliminar al Porfesor en la Asignatura. Por favor, inténtalo de nuevo.');
+  }
+});
+
+
+const cargarAsignaturasConEstudio = (  async (req, res) => {
+  try {
+    //  const asignaturas = await Asignatura.find().populate('estudio_id').lean(); // Obtener todas las asignaturas con su estudio
+    const asignaturas = await Asignatura.find().lean(); // Obtener todas las asignaturas
+    const estudios = await Estudio.find().lean(); // Obtener todos los estudios
+    // Crear un mapa de estudios por ID
+    const estudiosMap = {};
+    estudios.forEach(estudio => {
+      estudiosMap[estudio._id] = estudio;
+    });
+    // Modificar cada asignatura para reemplazar estudio_id con el objeto completo del estudio
+    const asignaturasConEstudio = asignaturas.map(asignatura => ({
+      ...asignatura,
+      estudio: estudiosMap[asignatura.estudio_id] || { nombre: "No encontrado", tipo: "-" }
+    }));
+    // Pasar la nueva lista de asignaturas a la vista
+    return asignaturasConEstudio ;
+  } catch (error) {
+    console.error('Error obteniendo las asignaturas:', error);
+    res.status(500).send('Error al cargar las asignaturas');
+    return [];
   }
 });
 

@@ -4,29 +4,27 @@
 <div class="col-md-5">
     <div class="card">
         <div class="card-body">
-            <form action="/signupAsignaturaAlumno" method="POST">
+            <form  method="POST">
                 <p>
                     <!-- Desplegable para seleccionar un alumno -->
                      <select name="usuario_id" required>
                         <% usuarios.forEach(usuario => { %>
                             <option value="<%= usuario._id %>"><%= usuario.nombre+" "+usuario.apellidos %></option>
                         <% }) %>
-                    </select>
-                    <button class="btn btn-secondary" type="submit">
-                        Quitar Asignatura al Alumno
-                    </button>
+                    </select>  
                 </p>
                 <p>
                     <!-- Desplegable para seleccionar una asignatura -->
                     <select name="asignatura_id" required>
                         <% asignaturas.forEach(asignatura => { %>
-                            <option value="<%= asignatura._id %>"><%= asignatura.nombre+" - "+asignatura.curso %></option>
+                            <option value="<%= asignatura._id %>"><%= asignatura.nombre+" - "+asignatura.curso %> ( <%= asignatura.estudio.nombre+" - "+asignatura.estudio.tipo %> )</option>
                         <% }) %>
-                    </select>
-                    <button class="btn btn-primary" type="submit">
-                        Agregar Asignatura al Alumno
+                    </select>                     
+                </p> 
+                <p>
+                     <button action="/signupAsignaturaAlumno" class="btn btn-primary" type="submit">
+                        Matricular - Desmatricular al Alumno
                     </button>
-                    
                 </p>
             </form>
         </div>
