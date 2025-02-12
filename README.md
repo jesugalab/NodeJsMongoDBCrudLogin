@@ -57,14 +57,9 @@ Alumno :
 
 Profesor:
 - mostrar asignaturas
+- mostrar alumnos de sus asignaturas
 - mostrar el listado de sofware de una asignatura
 - añadir y eliminar de sofware de una asignatura
 
-Admin:
-- añadir Usuario
-- añadir Estudio
-- añadir Asignatura
-- añadir alumno a asignatura
-- añadir profesor a asignatura
 
 Comprobar si hay que hacer mas. Creo que esto es lo minimo.
