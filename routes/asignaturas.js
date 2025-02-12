@@ -24,12 +24,12 @@ const isAuthenticatedAdmin = (req, res, next) => {
 // ** Se usa por Amin, profesor y alumno.
 router.get('/asignaturas', isAuthenticated, async (req, res) => {
   try {
-    // Obtener todas las asignaturas con su estudio
-    const asignaturasConEstudio = await cargarAsignaturasConEstudio();
-    res.render('asignaturas', { asignaturas: asignaturasConEstudio });
+      // Obtener todas las asignaturas con su estudio
+    const asignaturas = await cargarAsignaturasRegeneradaCompleta()
+    res.render('asignaturas', { asignaturas: asignaturas });
   } catch (error) {
     console.error('Error obteniendo las asignaturas:', error);
-    res.status(500).send('Error al cargar las asignaturas');
+    res.status(500).send('Error al cargar las asignaturas ..................');
   }
 });
 
@@ -240,6 +240,36 @@ const cargarAsignaturasConEstudio = (  async (req, res) => {
   }
 });
 
+
+const cargarAsignaturasRegeneradaCompleta = async (req, res) => {
+  try {
+    const asignaturas = await Asignatura.find().lean(); // Obtener todas las asignaturas
+    const estudios = await Estudio.find().lean(); // Obtener todos los estudios
+    const usuarios = await Usuario.find().lean(); // Obtener todos los usuarios
+    // Crear un mapa de estudios por ID
+    const estudiosMap = {};
+    estudios.forEach(estudio => {
+      estudiosMap[estudio._id] = estudio;
+    });
+    // Crear un mapa de usuarios por ID
+    const usuariosMap = {};
+    usuarios.forEach(usuario => {
+      usuariosMap[usuario._id] = usuario;
+    });
+    // Modificar cada asignatura para reemplazar `estudio_id`, `listaAlumnos` y `listaProfesores`
+    const asignaturasConDatos = asignaturas.map(asignatura => ({
+      ...asignatura,
+      estudio: estudiosMap[asignatura.estudio_id] || { nombre: "No encontrado", tipo: "-" },
+      listaAlumnos: asignatura.listaAlumnos.map(id => usuariosMap[id] || { nombre: "No encontrado", apellidos: "", email: "" }),
+      listaProfesores: asignatura.listaProfesores.map(id => usuariosMap[id] || { nombre: "No encontrado", apellidos: "", email: "" })
+    }));
+    return asignaturasConDatos;
+  } catch (error) {
+    console.error('Error obteniendo las asignaturas:', error);
+    res.status(500).send('Error al cargar las asignaturas');
+    return [];
+  }
+};
 
 
 
