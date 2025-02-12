@@ -24,19 +24,8 @@ const isAuthenticatedAdmin = (req, res, next) => {
 // ** Se usa por Amin, profesor y alumno.
 router.get('/asignaturas', isAuthenticated, async (req, res) => {
   try {
-    const asignaturas = await Asignatura.find().lean(); // Obtener todas las asignaturas
-    const estudios = await Estudio.find().lean(); // Obtener todos los estudios
-    // Crear un mapa de estudios por ID
-    const estudiosMap = {};
-    estudios.forEach(estudio => {
-      estudiosMap[estudio._id] = estudio;
-    });
-    // Modificar cada asignatura para reemplazar estudio_id con el objeto completo del estudio
-    const asignaturasConEstudio = asignaturas.map(asignatura => ({
-      ...asignatura,
-      estudio: estudiosMap[asignatura.estudio_id] || { nombre: "No encontrado", tipo: "-" }
-    }));
-    // Pasar la nueva lista de asignaturas a la vista
+    // Obtener todas las asignaturas con su estudio
+    const asignaturasConEstudio = await cargarAsignaturasConEstudio();
     res.render('asignaturas', { asignaturas: asignaturasConEstudio });
   } catch (error) {
     console.error('Error obteniendo las asignaturas:', error);
@@ -123,7 +112,7 @@ router.get('/asignaturas/delete/:id', isAuthenticated, async (req, res, next) =>
 router.get('/signupAsignaturaAlumno', isAuthenticated, async (req, res) => {
   try {
     const usuarios = await Usuario.find({rol:"Alumno"}); // Obtener todos los alumnos
-    const asignaturas = await Asignatura.find(); // Obtener todos las asignaturas
+    const asignaturas = await cargarAsignaturasConEstudio(); // Obtener todos las asignaturas con su estudio
     res.render('signupAsignaturaAlumno', { usuarios: usuarios || [], asignaturas: asignaturas || [], messages: req.flash() });
   } catch (error) {
     console.error('Error obteniendo los  usuarios o asignaturas en formulario de añadir asignariras a alumno:', error);
@@ -166,7 +155,7 @@ router.post('/signupAsignaturaAlumno', isAuthenticated, async (req, res) => {
 router.get('/signupAsignaturaProfesor', isAuthenticated, async (req, res) => {
   try {
     const usuarios = await Usuario.find({ rol:"Profesor"}); // Obtener todos los Profesores
-    const asignaturas = await Asignatura.find(); // Obtener todos las asignaturas
+    const asignaturas = await cargarAsignaturasConEstudio(); // Obtener todos las asignaturas con su estudio
     res.render('signupAsignaturaProfesor', { usuarios: usuarios || [], asignaturas: asignaturas || [], messages: req.flash() });
   } catch (error) {
     console.error('Error obteniendo los  usuarios o asignaturas en formulario de añadir asignariras a alumno:', error);
@@ -225,5 +214,33 @@ router.post('/signupAsignaturaProfesor/eliminar/', isAuthenticated, async (req, 
     res.status(500).send('Error la eliminar al Porfesor en la Asignatura. Por favor, inténtalo de nuevo.');
   }
 });
+
+
+const cargarAsignaturasConEstudio = (  async (req, res) => {
+  try {
+    //  const asignaturas = await Asignatura.find().populate('estudio_id').lean(); // Obtener todas las asignaturas con su estudio
+    const asignaturas = await Asignatura.find().lean(); // Obtener todas las asignaturas
+    const estudios = await Estudio.find().lean(); // Obtener todos los estudios
+    // Crear un mapa de estudios por ID
+    const estudiosMap = {};
+    estudios.forEach(estudio => {
+      estudiosMap[estudio._id] = estudio;
+    });
+    // Modificar cada asignatura para reemplazar estudio_id con el objeto completo del estudio
+    const asignaturasConEstudio = asignaturas.map(asignatura => ({
+      ...asignatura,
+      estudio: estudiosMap[asignatura.estudio_id] || { nombre: "No encontrado", tipo: "-" }
+    }));
+    // Pasar la nueva lista de asignaturas a la vista
+    return asignaturasConEstudio ;
+  } catch (error) {
+    console.error('Error obteniendo las asignaturas:', error);
+    res.status(500).send('Error al cargar las asignaturas');
+    return [];
+  }
+});
+
+
+
 
 module.exports = router;

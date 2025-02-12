@@ -20,7 +20,7 @@
                     <!-- Desplegable para seleccionar una asignatura -->
                     <select name="asignatura_id" required>
                         <% asignaturas.forEach(asignatura => { %>
-                            <option value="<%= asignatura._id %>"><%= asignatura.nombre+" - "+asignatura.curso %></option>
+                            <option value="<%= asignatura._id %>"><%= asignatura.nombre+" - "+asignatura.curso %> ( <%= asignatura.estudio.nombre+" - "+asignatura.estudio.tipo %> )</option>
                         <% }) %>
                     </select>
                     <button class="btn btn-primary" type="submit">
