@@ -1,0 +1,28 @@
+<% include partials/_header %>
+
+<div class="col-md-7 mx-auto">
+  <h2>Editar Software</h2>
+  <form action="/software/edit/<%= software._id %>" method="POST">
+    <div class="form-group">
+      <label for="descripcion">Descripción:</label>
+      <input type="text" class="form-control" id="descripcion" name="descripcion" value="<%= software.descripcion %>" required>
+    </div>
+    <div class="form-group">
+      <label for="link">Link:</label>
+      <input type="text" class="form-control" id="link" name="link" value="<%= software.link %>" required>
+    </div>
+    <div class="form-group">
+      <label for="asignatura_id">Asignatura:</label>
+      <select class="form-control" id="asignatura_id" name="asignatura_id" required>
+        <% asignaturas.forEach(asignatura => { %>
+          <option value="<%= asignatura._id %>" <%= software.asignatura_id && software.asignatura_id.toString() === asignatura._id.toString() ? 'selected' : '' %> >
+            <%= asignatura.nombre %> - <%= asignatura.curso %>
+          </option>
+        <% }) %>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-success">Guardar cambios</button>
+  </form>
+</div>
+
+<% include partials/_footer %>

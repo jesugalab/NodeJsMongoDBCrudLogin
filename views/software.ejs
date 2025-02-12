@@ -9,21 +9,30 @@
         <th>Descripcion</th>
         <th>Link</th>
         <th>Asignatura</th>
+        <% if (user.rol.toLowerCase() == "admin") { %> 
+          <th>Operaciones</th>
+        <% } %>
       </tr>
     </thead>
     <tbody>
       <% if (software.length > 0) { %>
-          <% software.forEach(software => { %>
-            <tr>
-              <td><%= software._id %></td>
-              <td><%= software.descripcion %></td>
-              <td><%= software.link %></td>
-              <td><%= software.asignatura.nombre %> - <%= software.asignatura.curso %></td>
-            </tr>
-          <% }) %>
+        <% software.forEach(software => { %>
+          <tr>
+            <td><%= software._id %></td>
+            <td><%= software.descripcion %></td>
+            <td><%= software.link %></td>
+            <td><%= software.asignatura.nombre %> - <%= software.asignatura.curso %></td>
+            <% if (user.rol.toLowerCase() == "admin") { %> 
+              <td>
+                <a href="/software/edit/<%= software._id %>" class="btn btn-info">Edit</a>
+                <a href="/software/delete/<%= software._id %>" class="btn btn-danger">Delete</a>
+              </td>
+            <% } %>
+          </tr>
+        <% }) %>
       <% } else { %>
         <tr>
-          <td colspan="6" class="text-center">No hay Software registrado</td>
+          <td colspan="5" class="text-center">No hay Software registrado</td>
         </tr>
       <% } %>
     </tbody>

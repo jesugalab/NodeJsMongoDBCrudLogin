@@ -3,6 +3,7 @@ const router = express.Router();
 const Asignatura = require('../models/asignatura'); // Corregí el nombre del modelo
 const Estudio = require('../models/estudio'); // Modelo de estudios
 const Usuario = require('../models/user'); // Modelo de usuarios
+const asignatura = require('../models/asignatura');
 
 // Middleware isAuthenticated definido directamente aquí
 const isAuthenticated = (req, res, next) => {
@@ -192,6 +193,44 @@ router.post('/signupAsignaturaProfesor', isAuthenticated, async (req, res) => {
   }
 });
 
+
+// Ruta GET para mostrar el formulario de edición de una asignatura
+router.get('/asignaturas/edit/:id', isAuthenticatedAdmin, async (req, res) => {
+  try {
+    const { id } = req.params; // Extrae el ID de la asignatura desde los parámetros de la URL
+    const asignatura = await Asignatura.findById(id).lean(); // Busca la asignatura por su ID en la base de datos
+    const estudios = await Estudio.find().lean(); // Obtiene todos los estudios disponibles en la base de datos
+
+    // Si la asignatura no se encuentra, responde con un error 404
+    if (!asignatura) {
+      return res.status(404).send('Asignatura no encontrada');
+    }
+
+    // Renderiza la vista de edición con la asignatura y los estudios disponibles
+    res.render('edit_asignatura', { asignatura, estudios, messages: req.flash() });
+  } catch (error) {
+    console.error('Error al obtener la asignatura:', error);
+    res.status(500).send('Error al cargar la asignatura'); // Responde con un error 500 en caso de fallo
+  }
+});
+
+
+// Código para hacer funcional el boton "Edit" de las asignaturas
+// Ruta POST para procesar la actualización de una asignatura
+router.post('/asignaturas/edit/:id', isAuthenticatedAdmin, async (req, res) => {
+  try {
+    const { id } = req.params; // Extrae el ID de la asignatura desde los parámetros de la URL
+    const { nombre, curso, estudio_id } = req.body; // Extrae los datos enviados desde el formulario
+
+    // Actualiza la asignatura en la base de datos con los nuevos valores
+    await Asignatura.findByIdAndUpdate(id, { nombre, curso, estudio_id });
+
+    // Muestra un mensaje de éxito y redirige a la lista de asignaturas
+    req.flash('successMessage', 'Asignatura actualizada correctamente.');
+    res.redirect('/asignaturas');
+  } catch (error) {
+    console.error('Error al actualizar la asignatura:', error);
+    res.status(500).send('Error al actualizar la asignatura.'); // Responde con un error 500 en caso de fallo
 
 // Ruta para procesar el formulario de eliminar asignaturas a un profesor
 router.post('/signupAsignaturaProfesor/eliminar/', isAuthenticated, async (req, res) => {
