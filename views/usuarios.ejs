@@ -26,8 +26,10 @@
             <td><%= usuario.email %></td>
             <td><%= usuario.rol %></td>
             <td>
-              <a href="/usuarios/edit/<%= usuario._id %>" class="btn btn-info">Edit</a>
-              <a href="/usuarios/delete/<%= usuario._id %>" class="btn btn-danger">Delet</a>
+              <div class="d-flex gap-2">
+                <a href="/usuarios/edit/<%= usuario._id %>" class="btn btn-info">Edit</a>
+                <a href="/usuarios/delete/<%= usuario._id %>" class="btn btn-danger">Delete</a>
+              </div>
             </td>
           </tr>
         <% }) %>

@@ -38,8 +38,10 @@
                 .join(" ") 
                 %>
               <td>
-                <a href="/asignaturas/edit/<%= asignatura._id %>" class="btn btn-info">Edit</a>
-                <a href="/asignaturas/delete/<%= asignatura._id %>" class="btn btn-danger">Delete</a>
+                <div class="d-flex gap-2">
+                  <a href="/asignaturas/edit/<%= asignatura._id %>" class="btn btn-info">Edit</a>
+                  <a href="/asignaturas/delete/<%= asignatura._id %>" class="btn btn-danger">Delete</a>
+                </div>
               </td>
             </tr>
           <% }) %>
