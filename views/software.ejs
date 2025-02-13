@@ -24,8 +24,11 @@
             <td><%= software.asignatura.nombre %> - <%= software.asignatura.curso %></td>
             <% if (user.rol.toLowerCase() == "admin") { %> 
               <td>
-                <a href="/software/edit/<%= software._id %>" class="btn btn-info">Edit</a>
-                <a href="/software/delete/<%= software._id %>" class="btn btn-danger">Delete</a>
+                <div class="d-flex gap-2">
+                  <a href="/software/edit/<%= software._id %>" class="btn btn-info">Edit</a>
+                  <a href="/software/delete/<%= software._id %>" class="btn btn-danger">Delete</a>
+                </div>
+                
               </td>
             <% } %>
           </tr>

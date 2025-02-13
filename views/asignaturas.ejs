@@ -5,6 +5,28 @@
     <table class="table table-bordered table-hover">
         <thead>
             <tr>
+ 
+              <td><%= asignatura._id %></td>
+              <td><%= asignatura.nombre %></td>
+              <td><%= asignatura.curso %></td>
+              <td><%= asignatura.estudio.nombre %> - <%= asignatura.estudio.tipo %></td>
+              <td>
+                <%- asignatura.listaAlumnos
+                .map(alumno => `<p>${alumno.nombre} ${alumno.apellidos} (${alumno.email})</p>`)
+                .join(" ") 
+                %>
+              </td>
+              <td>
+                <%- asignatura.listaProfesores
+                .map(profesor => `<p>${profesor.nombre} ${profesor.apellidos} (${profesor.email})</p>`)
+                .join(" ") 
+                %>
+              <td>
+                <div class="d-flex gap-2">
+                  <a href="/asignaturas/edit/<%= asignatura._id %>" class="btn btn-info">Edit</a>
+                  <a href="/asignaturas/delete/<%= asignatura._id %>" class="btn btn-danger">Delete</a>
+                </div>
+              </td>
                 <th>ID</th>
                 <th>Nombre</th>
                 <th>Curso</th>
@@ -13,6 +35,7 @@
                 <% if (user.rol.toLowerCase() == "admin") { %>
                     <th>Operaciones</th>
                 <% } %>
+
             </tr>
         </thead>
         <tbody>
