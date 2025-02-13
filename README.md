@@ -3,7 +3,7 @@ HACIENDO:
 - Jesus: por ahora nada
 - David: Mostrar Software y asignaturas de profesores y alumnos
 - Rodrigo:
-- Alvaro: 
+- Alvaro: Estilos
 - Felipe:
 
 
