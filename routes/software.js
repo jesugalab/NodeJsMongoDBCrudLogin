@@ -12,6 +12,14 @@ const isAuthenticated = (req, res, next) => {
   res.redirect('/'); // Si no está autenticado, redirige al inicio
 };
 
+// Middleware para alumnos y profesores.
+const isAuthenticatedNotAdmin = (req, res, next) => {
+  if (req.isAuthenticated() && !req.user.rol.toLowerCase() === 'admin') { // Verifica si el usuario está autenticado
+    return next(); // Si está autenticado, continúa con la siguiente función
+  }
+  res.redirect('/'); // Si no está autenticado, redirige al inicio
+};
+
 
 // Ruta para listar los software con la información completa de la asignatura
 router.get('/software', isAuthenticated, async (req, res) => {
@@ -36,7 +44,7 @@ router.get('/software', isAuthenticated, async (req, res) => {
   }
 });
 // Ruta para que los alumnos vean el software de sus asignaturas
-router.get('/software', isAuthenticated, async (req, res) => {
+router.get('/software', isAuthenticatedNotAdmin, async (req, res) => {
   try {
     if (req.user.rol.toLowerCase() == 'alumno'||req.user.rol.toLowerCase() == 'profesor') {
       const software = await Software.findByAlumno(req.user._id);

@@ -1,30 +1,33 @@
 <% include partials/_header %>
 
-<H2>Crear Cuenta Nueva</H2>
-<div class="col-md-5">
-    <div class="card">
-        <div class="card-body">
-            <form action="/signup" method="POST">
-              <p> 
-                <input type="text" name="nombre" placeholder="Nombre" required>
-                <input type="text" name="apellidos" placeholder="Apellidos" required>
-              </p>
-            <p>
-                <input type="email" name="email" placeholder="Email" required>
-                <input type="password" name="password" placeholder="Password" required>
-            </p>
-            <p>
-                <!-- Desplegable para seleccionar el rol -->
-                <select name="rol" required>
-                    <option value="Alumno">Alumno</option>
-                    <option value="Profesor">Profesor</option>
-                    <option value="Admin">Admin</option>
-                </select>
-                <button class="btn btn-primary" type="submit">
-                    Crear Cuenta
-                </button>
-              </p>
-            </form>
+<H2 class="text-center">Crear Cuenta Nueva</H2> 
+<!-- Esto pone el formulario en el centro de la pantalla. -->
+<div class="row justify-content-center"> 
+    <div class="col-md-5">
+        <div class="card">
+            <div class="card-body">
+                <form action="/signup" method="POST">
+                <p> 
+                    <input type="text" name="nombre" placeholder="Nombre" required>
+                    <input type="text" name="apellidos" placeholder="Apellidos" required>
+                </p>
+                <p>
+                    <input type="email" name="email" placeholder="Email" required>
+                    <input type="password" name="password" placeholder="Password" required>
+                </p>
+                <p>
+                    <!-- Desplegable para seleccionar el rol -->
+                    <select name="rol" required>
+                        <option value="Alumno">Alumno</option>
+                        <option value="Profesor">Profesor</option>
+                        <option value="Admin">Admin</option>
+                    </select>
+                    <button class="btn btn-primary" type="submit">
+                        Crear Cuenta
+                    </button>
+                </p>
+                </form>
+            </div>
         </div>
     </div>
 </div>
