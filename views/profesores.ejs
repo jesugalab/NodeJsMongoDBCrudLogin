@@ -10,6 +10,9 @@
         <th>Nombre</th>
         <th>Apellidos</th>
         <th>Correo</th>
+        <% if (user.rol.toLowerCase() == "admin") { %> 
+          <th>Operaciones</th>
+        <% } %>
       </tr>
     </thead>
     <tbody>
@@ -20,6 +23,12 @@
             <td><%= usuario.nombre %></td>
             <td><%= usuario.apellidos %></td>
             <td><%= usuario.email %></td>
+            <td>
+              <div class="d-flex gap-2">
+                <a href="/usuarios/edit/<%= usuario._id %>" class="btn btn-info">Edit</a>
+                <a href="/usuarios/delete/<%= usuario._id %>" class="btn btn-danger">Delete</a>
+              </div>
+            </td>
           </tr>
         <% }) %>
       <% } else { %>
