@@ -49,6 +49,8 @@ Se que Falta:
 
 - Hacer el diagrama de las entidades
 - Centrar los formularios (Como minimo)
+- Botones de software, estudios, alumnos y profesores.
+- 
 
 Alumno :
 - mostrar asignaturas
