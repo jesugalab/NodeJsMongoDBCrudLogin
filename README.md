@@ -1,9 +1,9 @@
 HACIENDO:
 
 - Jesus: por ahora nada
-- David: 
+- David: Mostrar Software y asignaturas de profesores y alumnos
 - Rodrigo:
-- Alvaro: 
+- Alvaro: Estilos
 - Felipe:
 
 
@@ -49,6 +49,8 @@ Se que Falta:
 
 - Hacer el diagrama de las entidades
 - Centrar los formularios (Como minimo)
+- Botones de software, estudios, alumnos y profesores.
+- 
 
 Alumno :
 - mostrar asignaturas
@@ -57,14 +59,9 @@ Alumno :
 
 Profesor:
 - mostrar asignaturas
+- mostrar alumnos de sus asignaturas
 - mostrar el listado de sofware de una asignatura
 - añadir y eliminar de sofware de una asignatura
 
-Admin:
-- añadir Usuario
-- añadir Estudio
-- añadir Asignatura
-- añadir alumno a asignatura
-- añadir profesor a asignatura
 
 Comprobar si hay que hacer mas. Creo que esto es lo minimo.

@@ -21,19 +21,6 @@ const isAuthenticatedAdmin = (req, res, next) => {
   res.redirect('/'); // Si no está autenticado, redirige al inicio
 };
 
-// Ruta para listar las asignaturas con la información completa del estudio
-// ** Se usa por Amin, profesor y alumno.
-router.get('/asignaturas', isAuthenticated, async (req, res) => {
-  try {
-      // Obtener todas las asignaturas con su estudio
-    const asignaturas = await cargarAsignaturasRegeneradaCompleta()
-    res.render('asignaturas', { asignaturas: asignaturas });
-  } catch (error) {
-    console.error('Error obteniendo las asignaturas:', error);
-    res.status(500).send('Error al cargar las asignaturas ..................');
-  }
-});
-
 // Ruta para mostrar el formulario de creación de asignaturas con los estudios
 // ** Se usa por Admin.
 router.get('/signupAsignatura', isAuthenticatedAdmin, async (req, res) => {
@@ -50,6 +37,11 @@ router.get('/signupAsignatura', isAuthenticatedAdmin, async (req, res) => {
 // ** Se usa por Admin.
 router.post('/signupAsignatura', isAuthenticatedAdmin, async (req, res) => {
   const { nombre, curso, estudio_id } = req.body;
+
+  if (curso < 1 || curso >4) {
+    req.flash('errorMessage', 'El curso no puede ser un número negativo, cero o mayor de 4.');
+    return res.redirect('/signupAsignatura'); // 🔹 Redirige de nuevo al formulario
+  }
 
   try {
     // Crea una nueva asignatura
@@ -71,16 +63,25 @@ router.post('/signupAsignatura', isAuthenticatedAdmin, async (req, res) => {
 
 // Ruta para listar todas las asignaturas del usuario
 // Se usa por Admin, profesor y alumno.
+//METODOS RUTA
 router.get('/asignaturas', isAuthenticated, async (req, res) => {
   try {
-    // Busca las asignaturas del usuario autenticado
-    const asignaturas = await Asignatura.find({ usuario: req.user._id });
+      // Obtener todas las asignaturas con su estudio
+    if (req.user.rol.toLowerCase() === 'admin') {
+    const asignaturas = await cargarAsignaturasRegeneradaCompleta()
+    res.render('asignaturas', { asignaturas: asignaturas });
+    }else {
+      // Si es profesor o alumno, obtener solo las asignaturas del usuario
+      asignaturas = await Asignatura.findByUser(req.user._id, req.user.rol);
+  }
 
-    // Renderiza la vista con las asignaturas
-    res.render('asignaturas', { asignaturas });
-  } catch (error) {
-    console.error('Error al obtener las asignaturas:', error);
-    res.status(500).send('Error al obtener las asignaturas. Por favor, inténtalo de nuevo.');
+  res.render('asignaturas', {
+      asignaturas: asignaturas,
+      user: req.user
+  });
+} catch (error) {
+    console.error('Error obteniendo las asignaturas:', error);
+    res.status(500).send('Error al cargar las asignaturas ..................');
   }
 });
 

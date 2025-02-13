@@ -19,6 +19,14 @@
                             <% }) %>
                         </select>
 
+                        <% if (messages.errorMessage) { %>
+                            <div class="alert alert-danger"><%= messages.errorMessage %></div>
+                          <% } %>
+                          
+                          <% if (messages.successMessage) { %>
+                            <div class="alert alert-success"><%= messages.successMessage %></div>
+                          <% } %>
+
                         <button class="btn btn-primary" type="submit">
                             Crear Asignatura
                         </button>

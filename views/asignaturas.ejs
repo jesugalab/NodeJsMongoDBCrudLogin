@@ -1,27 +1,11 @@
 <% include partials/_header %>
 
 <div class="col-md-7 mx-auto">
-  <h2>Lista de Asignaturas</h2>
-  <table class="table table-bordered table-hover">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Curso</th>
-        <th>Estudio</th>
-        <th>Lista Alumnos</th>
-        <th>Lista Profesores</th>
-        <% if (user.rol.toLowerCase() == "admin") { %> 
-          <th>Operaciones</th>
-        <% } %>
-      </tr>
-    </thead>
-    <tbody>
-
-      <% if (user.rol.toLowerCase() == "admin") { %> 
-        <% if (asignaturas.length > 0) { %>
-          <% asignaturas.forEach(asignatura => { %>
+    <h2>Lista de Asignaturas</h2>
+    <table class="table table-bordered table-hover">
+        <thead>
             <tr>
+ 
               <td><%= asignatura._id %></td>
               <td><%= asignatura.nombre %></td>
               <td><%= asignatura.curso %></td>
@@ -43,77 +27,61 @@
                   <a href="/asignaturas/delete/<%= asignatura._id %>" class="btn btn-danger">Delete</a>
                 </div>
               </td>
-            </tr>
-          <% }) %>
-        <% } else { %>
-          <tr>
-            <td colspan="7" class="text-center">No hay asignaturas registradas</td>
-          </tr>
-        <% } %>
-    
-      <% } else if (user.rol.toLowerCase() == "profesor") { %>
-        <% if (asignaturas.length > 0) { %>
-          <% let tieneAsignaturas = false; %>
-          <% asignaturas.forEach(asignatura => { %>
-            <% if (asignatura.listaProfesores._id == user._id) { %>
-              <tr>
-                <td><%= asignatura._id %></td>
-                <td><%= asignatura.nombre %></td>
-                <td><%= asignatura.curso %></td>
-                <td><%= asignatura.estudio.nombre %> - <%= asignatura.estudio.tipo %></td>
-                <td><%= asignatura.listaAlumnos.join(", ") %></td>
-                <td><%= asignatura.listaProfesores.join(", ") %></td>
-              </tr>
-              <% tieneAsignaturas = true; %>
-            <% } %>
-          <% }) %>
-          <% if (!tieneAsignaturas) { %>
-            <tr>
-              <td colspan="6" class="text-center">Este profesor no tiene asignaturas</td>
-            </tr>
-          <% } %>
-        <% } else { %>
-          <tr>
-            <td colspan="6" class="text-center">No hay asignaturas registradas</td>
-          </tr>
-        <% } %>
-    
-      <% } else if (user.rol.toLowerCase() == "alumno") { %>
-        <% if (asignaturas.length > 0) { %>
-          <% let tieneAsignaturas = false; %>
-          <% asignaturas.forEach(asignatura => { %>
-            <% if (asignatura.listaAlumnos._id == user._id) { %>
-              <tr>
-                <td><%= asignatura._id %></td>
-                <td><%= asignatura.nombre %></td>
-                <td><%= asignatura.curso %></td>
-                <td><%= asignatura.estudio.nombre %> - <%= asignatura.estudio.tipo %></td>
-                <td><%= asignatura.listaAlumnos.join(", ") %></td>
-                <td><%= asignatura.listaProfesores.join(", ") %></td>
-              </tr>
-              <% tieneAsignaturas = true; %>
-            <% } %>
-          <% }) %>
-          <% if (!tieneAsignaturas) { %>
-            <tr>
-              <td colspan="6" class="text-center">Este alumno no tiene asignaturas</td>
-            </tr>
-          <% } %>
-        <% } else { %>
-          <tr>
-            <td colspan="6" class="text-center">No hay asignaturas registradas</td>
-          </tr>
-        <% } %>
-    
-      <% } else { %>
-        <tr>
-          <td colspan="6" class="text-center">No hay asignaturas registradas</td>
-        </tr>
-      <% } %>
-    
-    </tbody>
-  </table>
-</div>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Curso</th>
+                <th>Lista Alumnos</th>
+                <th>Lista Profesores</th>
+                <% if (user.rol.toLowerCase() == "admin") { %>
+                    <th>Operaciones</th>
+                <% } %>
 
+            </tr>
+        </thead>
+        <tbody>
+            <% if (asignaturas && asignaturas.length > 0) { %>
+                <% asignaturas.forEach(asignatura => { %>
+                    <tr>
+                        <td><%= asignatura._id %></td>
+                        <td><%= asignatura.nombre %></td>
+                        <td><%= asignatura.curso %></td>
+                        <td>
+                            <% if (asignatura.listaAlumnos && asignatura.listaAlumnos.length > 0) { %>
+                                <%- asignatura.listaAlumnos
+                                .map(alumno => `<p>${alumno.nombre} ${alumno.apellidos} (${alumno.email})</p>`)
+                                .join(" ")
+                                %>
+                            <% } else { %>
+                                <p>Sin Alumnos</p>
+                            <% } %>
+                        </td>
+                        <td>
+                            <% if (asignatura.listaProfesores && asignatura.listaProfesores.length > 0) { %>
+                                <%- asignatura.listaProfesores
+                                .map(profesor => `<p>${profesor.nombre} ${profesor.apellidos} (${profesor.email})</p>`)
+                                .join(" ")
+                                %>
+                            <% } else { %>
+                                <p>Sin Profesores</p>
+                            <% } %>
+                        </td>
+                        <% if (user.rol.toLowerCase() == "admin") { %>
+                            <td>
+                                <a href="/asignaturas/edit/<%= asignatura._id %>" class="btn btn-info">Edit</a>
+                                <a href="/asignaturas/delete/<%= asignatura._id %>" class="btn btn-danger">Delete</a>
+                            </td>
+                        <% } %>
+                    </tr>
+                <% }) %>
+            <% } else { %>
+                <tr>
+                    <td colspan="7" class="text-center">No hay asignaturas registradas</td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>
 <% include partials/_footer %>
+
+
 
