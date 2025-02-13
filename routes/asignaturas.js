@@ -38,6 +38,11 @@ router.get('/signupAsignatura', isAuthenticatedAdmin, async (req, res) => {
 router.post('/signupAsignatura', isAuthenticatedAdmin, async (req, res) => {
   const { nombre, curso, estudio_id } = req.body;
 
+  if (curso < 1 || curso >4) {
+    req.flash('errorMessage', 'El curso no puede ser un número negativo, cero o mayor de 4.');
+    return res.redirect('/signupAsignatura'); // 🔹 Redirige de nuevo al formulario
+  }
+
   try {
     // Crea una nueva asignatura
     const nuevaAsignatura = new Asignatura({
