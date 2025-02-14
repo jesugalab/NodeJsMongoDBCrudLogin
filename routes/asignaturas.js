@@ -52,25 +52,24 @@ router.post('/signupAsignatura', isAuthenticatedAdmin, async (req, res) => {
 });
 
 // Ruta para listar todas las asignaturas
-// Ruta para listar todas las asignaturas
 router.get('/asignaturas', isAuthenticated, async (req, res) => {
-  try {
-      let asignaturas;
-      if (req.user.rol.toLowerCase() === 'admin') {
-          asignaturas = await cargarAsignaturasRegeneradaCompleta();
-      } else {
-          // Si es profesor o alumno, obtener solo las asignaturas del usuario
-          asignaturas = await Asignatura.findByUser(req.user._id, req.user.rol);
-      }
+    try {
+        let asignaturas;
+        if (req.user.rol.toLowerCase() === 'admin') {
+            asignaturas = await cargarAsignaturasRegeneradaCompleta();
+        } else {
+            // Si es profesor o alumno, obtener solo las asignaturas del usuario
+            asignaturas = await Asignatura.findByUser(req.user._id, req.user.rol);
+        }
 
-      res.render('asignaturas', {
-          asignaturas: asignaturas,
-          user: req.user
-      });
-  } catch (error) {
-      console.error('Error obteniendo las asignaturas:', error);
-      res.status(500).send('Error al cargar las asignaturas.');
-  }
+        res.render('asignaturas', {
+            asignaturas: asignaturas,
+            user: req.user
+        });
+    } catch (error) {
+        console.error('Error obteniendo las asignaturas:', error);
+        res.status(500).send('Error al cargar las asignaturas.');
+    }
 });
 
 
@@ -165,7 +164,6 @@ router.post('/signupAsignaturaProfesor', isAuthenticated, async (req, res) => {
 });
 
 // Método para cargar asignaturas con su estudio
-// Método para cargar asignaturas con su estudio
 const cargarAsignaturasConEstudio = async () => {
   try {
       const asignaturas = await Asignatura.find().lean();
@@ -188,6 +186,7 @@ const cargarAsignaturasConEstudio = async () => {
   }
 };
 
+// Método para cargar asignaturas con todos los datos completos
 // Método para cargar asignaturas con todos los datos completos
 const cargarAsignaturasRegeneradaCompleta = async () => {
   try {
