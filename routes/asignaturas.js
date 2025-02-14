@@ -54,18 +54,26 @@ router.post('/signupAsignatura', isAuthenticatedAdmin, async (req, res) => {
 // Ruta para listar todas las asignaturas
 router.get('/asignaturas', isAuthenticated, async (req, res) => {
   try {
-    let asignaturas;
+      // Obtener todas las asignaturas con su estudio
     if (req.user.rol.toLowerCase() === 'admin') {
-      asignaturas = await cargarAsignaturasRegeneradaCompleta();
-    } else {
+    const asignaturas = await cargarAsignaturasRegeneradaCompleta()
+    res.render('asignaturas', { asignaturas: asignaturas });
+    }else {
+      // Si es profesor o alumno, obtener solo las asignaturas del usuario
       asignaturas = await Asignatura.findByUser(req.user._id, req.user.rol);
-    }
-    res.render('asignaturas', { asignaturas, user: req.user });
-  } catch (error) {
+      res.render('asignaturas', {
+      asignaturas: asignaturas,
+      user: req.user
+  });
+  }
+
+  
+} catch (error) {
     console.error('Error obteniendo las asignaturas:', error);
-    res.status(500).send('Error al cargar las asignaturas.');
+    res.status(500).send('Error al cargar las asignaturas ..................');
   }
 });
+
 
 // Ruta para eliminar una asignatura (por Admin)
 router.get('/asignaturas/delete/:id', isAuthenticatedAdmin, async (req, res) => {

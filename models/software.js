@@ -66,6 +66,23 @@ softwareSchema.statics.findByAlumno = async function(alumnoId) {
   const asignaturaIds = asignaturas.map(asignatura => asignatura._id);
   return this.find({ asignatura_id: { $in: asignaturaIds } });
 };
+softwareSchema.statics.findByUser = async function(userId, userRole) {
+  const Asignatura = mongoose.model('listaAsignatura');
+  let asignaturas;
+
+  if (userRole.toLowerCase() === 'admin') {
+    return this.find().lean();
+  } else if (userRole.toLowerCase() === 'profesor') {
+    asignaturas = await Asignatura.find({ listaProfesores: userId }).select('_id');
+  } else if (userRole.toLowerCase() === 'alumno') {
+    asignaturas = await Asignatura.find({ listaAlumnos: userId }).select('_id');
+  } else {
+    return [];
+  }
+
+  const asignaturaIds = asignaturas.map(asignatura => asignatura._id);
+  return this.find({ asignatura_id: { $in: asignaturaIds } }).lean();
+};
 
 
 module.exports = mongoose.model('listaSoftware', softwareSchema);

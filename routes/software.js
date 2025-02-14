@@ -20,46 +20,27 @@ const isAuthenticatedNotAdmin = (req, res, next) => {
   res.redirect('/'); // Si no está autenticado, redirige al inicio
 };
 
-
-// Ruta para listar los software con la información completa de la asignatura
+//ruta cada usuario ve sus software
 router.get('/software', isAuthenticated, async (req, res) => {
   try {
-    const asignaturas = await Asignatura.find().lean(); // Obtener todas las asignaturas
-    const software = await Software.find().lean(); // Obtener todos los software
-    // Crear un mapa de asignaturas por ID
+    const software = await Software.findByUser(req.user._id, req.user.rol);
+    const asignaturas = await Asignatura.find().lean();
+
     const asignaturaMap = {};
     asignaturas.forEach(asignatura => {
       asignaturaMap[asignatura._id] = asignatura;
     });
-    // Modificar cada  para reemplazar asignatura_id con el objeto completo de asignatura
-    const softwareConAsig = software.map(software => ({
-      ...software,
-      asignatura: asignaturaMap[software.asignatura_id] || { nombre: "No encontrada", tipo: "-" }
+
+    const softwareConAsig = software.map(sw => ({
+      ...sw,
+      asignatura: asignaturaMap[sw.asignatura_id] || { nombre: "No encontrada", tipo: "-" }
     }));
-    // Pasar la nueva lista de software a la vista
-    res.render('software', { software: softwareConAsig });
+
+    res.render('software', { software: softwareConAsig, user: req.user });
   } catch (error) {
     console.error('Error obteniendo el software:', error);
     res.status(500).send('Error al cargar el software');
   }
-});
-// Ruta para que los alumnos vean el software de sus asignaturas
-router.get('/software', isAuthenticatedNotAdmin, async (req, res) => {
-  try {
-    if (req.user.rol.toLowerCase() == 'alumno'||req.user.rol.toLowerCase() == 'profesor') {
-      const software = await Software.findByAlumno(req.user._id);
-    res.render('software', { software });
-  
-    }else if (req.user.rol.toLowerCase() == 'admin') {
-      const software = await Software.findByAlumno(req.user._id);
-    res.render('software', { software });
-    }
-  } catch (error) {
-    console.error('Error obteniendo el software del alumno:', error);
-    res.status(500).send('Error al cargar el software del alumno');
-  }
-
-    
 });
 // Ruta para mostrar el formulario de creación de software con las asignaturas
 router.get('/signupSoftware', isAuthenticated, async (req, res) => {

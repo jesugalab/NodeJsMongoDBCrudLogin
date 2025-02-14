@@ -23,7 +23,7 @@
                         <td><%= asignatura._id %></td>
                         <td><%= asignatura.nombre %></td>
                         <td><%= asignatura.curso %></td>
-                        <td><%= asignatura.estudio.nombre %> - <%= asignatura.estudio.tipo %></td>
+                        <td><%= asignatura.estudio_id ? asignatura.estudio_id.nombre + ' - ' + asignatura.estudio_id.tipo : 'Sin Estudio' %></td>
                         <td>
                             <% if (asignatura.listaAlumnos && asignatura.listaAlumnos.length > 0) { %>
                                 <%- asignatura.listaAlumnos
@@ -46,9 +46,9 @@
                         </td>
                         <% if (user.rol.toLowerCase() == "admin") { %>
                             <td>
-                                <div class="d-flex gap-2">
-                                    <a href="/asignaturas/edit/<%= asignatura._id %>" class="btn btn-info">Edit</a>
-                                    <a href="/asignaturas/delete/<%= asignatura._id %>" class="btn btn-danger">Delete</a>
+                                <div class="btn-group" role="group">
+                                    <a href="/asignaturas/edit/<%= asignatura._id %>" class="btn btn-info btn-sm me-1" style="width: 60px;">Edit</a>
+                                    <a href="/asignaturas/delete/<%= asignatura._id %>" class="btn btn-danger btn-sm" style="width: 60px;">Delete</a>
                                 </div>
                             </td>
                         <% } %>
