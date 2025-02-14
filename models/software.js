@@ -67,7 +67,7 @@ softwareSchema.statics.findByAlumno = async function(alumnoId) {
   return this.find({ asignatura_id: { $in: asignaturaIds } });
 };
 softwareSchema.statics.findByUser = async function(userId, userRole) {
-  const Asignatura = mongoose.model('listaAsignatura');
+  const Asignatura = mongoose.model('Asignatura');
   let asignaturas;
 
   if (userRole.toLowerCase() === 'admin') {
