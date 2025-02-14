@@ -67,21 +67,39 @@ softwareSchema.statics.findByAlumno = async function(alumnoId) {
   return this.find({ asignatura_id: { $in: asignaturaIds } });
 };
 softwareSchema.statics.findByUser = async function(userId, userRole) {
-  const Asignatura = mongoose.model('Asignatura');
-  let asignaturas;
+  let asignaturas = [];
 
-  if (userRole.toLowerCase() === 'admin') {
-    return this.find().lean();
-  } else if (userRole.toLowerCase() === 'profesor') {
-    asignaturas = await Asignatura.find({ listaProfesores: userId }).select('_id');
-  } else if (userRole.toLowerCase() === 'alumno') {
-    asignaturas = await Asignatura.find({ listaAlumnos: userId }).select('_id');
-  } else {
-    return [];
+  try {
+      const Asignatura = mongoose.model('listaAsignatura'); // Obtener el modelo Asignatura
+
+      let asignaturaIds = [];
+
+      if (userRole.toLowerCase() === 'admin') {
+          return await this.find().lean();
+      } else if (userRole.toLowerCase() === 'profesor') {
+          const asignaturasProfesor = await Asignatura.find({
+              listaProfesores: userId
+          }).lean();
+          asignaturaIds = asignaturasProfesor.map(asignatura => asignatura._id);
+      } else if (userRole.toLowerCase() === 'alumno') {
+          const asignaturasAlumno = await Asignatura.find({
+              listaAlumnos: userId
+          }).lean();
+          asignaturaIds = asignaturasAlumno.map(asignatura => asignatura._id);
+      } else {
+          return [];
+      }
+
+      // Buscar el software que pertenece a alguna de las asignaturas del usuario
+      return await this.find({
+          asignatura_id: {
+              $in: asignaturaIds
+          }
+      }).lean();
+  } catch (error) {
+      console.error('Error al obtener el software:', error);
+      return [];
   }
-
-  const asignaturaIds = asignaturas.map(asignatura => asignatura._id);
-  return this.find({ asignatura_id: { $in: asignaturaIds } }).lean();
 };
 
 

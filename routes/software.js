@@ -23,23 +23,29 @@ const isAuthenticatedNotAdmin = (req, res, next) => {
 //ruta cada usuario ve sus software
 router.get('/software', isAuthenticated, async (req, res) => {
   try {
-    const software = await Software.findByUser(req.user._id, req.user.rol);
-    const asignaturas = await Asignatura.find().lean();
+      const software = await Software.findByUser(req.user._id, req.user.rol);
+      const asignaturas = await Asignatura.find().lean();
 
-    const asignaturaMap = {};
-    asignaturas.forEach(asignatura => {
-      asignaturaMap[asignatura._id] = asignatura;
-    });
+      const asignaturaMap = {};
+      asignaturas.forEach(asignatura => {
+          asignaturaMap[asignatura._id] = asignatura;
+      });
 
-    const softwareConAsig = software.map(sw => ({
-      ...sw,
-      asignatura: asignaturaMap[sw.asignatura_id] || { nombre: "No encontrada", tipo: "-" }
-    }));
+      const softwareConAsig = software.map(sw => ({
+          ...sw,
+          asignatura: asignaturaMap[sw.asignatura_id] || {
+              nombre: "No encontrada",
+              tipo: "-"
+          }
+      }));
 
-    res.render('software', { software: softwareConAsig, user: req.user });
+      res.render('software', {
+          software: softwareConAsig,
+          user: req.user
+      });
   } catch (error) {
-    console.error('Error obteniendo el software:', error);
-    res.status(500).send('Error al cargar el software');
+      console.error('Error obteniendo el software:', error);
+      res.status(500).send('Error al cargar el software');
   }
 });
 // Ruta para mostrar el formulario de creación de software con las asignaturas
