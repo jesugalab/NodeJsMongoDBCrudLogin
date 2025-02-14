@@ -5,37 +5,15 @@
     <table class="table table-bordered table-hover">
         <thead>
             <tr>
- 
-              <td><%= asignatura._id %></td>
-              <td><%= asignatura.nombre %></td>
-              <td><%= asignatura.curso %></td>
-              <td><%= asignatura.estudio.nombre %> - <%= asignatura.estudio.tipo %></td>
-              <td>
-                <%- asignatura.listaAlumnos
-                .map(alumno => `<p>${alumno.nombre} ${alumno.apellidos} (${alumno.email})</p>`)
-                .join(" ") 
-                %>
-              </td>
-              <td>
-                <%- asignatura.listaProfesores
-                .map(profesor => `<p>${profesor.nombre} ${profesor.apellidos} (${profesor.email})</p>`)
-                .join(" ") 
-                %>
-              <td>
-                <div class="d-flex gap-2">
-                  <a href="/asignaturas/edit/<%= asignatura._id %>" class="btn btn-info">Edit</a>
-                  <a href="/asignaturas/delete/<%= asignatura._id %>" class="btn btn-danger">Delete</a>
-                </div>
-              </td>
                 <th>ID</th>
                 <th>Nombre</th>
                 <th>Curso</th>
+                <th>Estudio</th>
                 <th>Lista Alumnos</th>
                 <th>Lista Profesores</th>
                 <% if (user.rol.toLowerCase() == "admin") { %>
                     <th>Operaciones</th>
                 <% } %>
-
             </tr>
         </thead>
         <tbody>
@@ -45,6 +23,7 @@
                         <td><%= asignatura._id %></td>
                         <td><%= asignatura.nombre %></td>
                         <td><%= asignatura.curso %></td>
+                        <td><%= asignatura.estudio.nombre %> - <%= asignatura.estudio.tipo %></td>
                         <td>
                             <% if (asignatura.listaAlumnos && asignatura.listaAlumnos.length > 0) { %>
                                 <%- asignatura.listaAlumnos
@@ -67,8 +46,10 @@
                         </td>
                         <% if (user.rol.toLowerCase() == "admin") { %>
                             <td>
-                                <a href="/asignaturas/edit/<%= asignatura._id %>" class="btn btn-info">Edit</a>
-                                <a href="/asignaturas/delete/<%= asignatura._id %>" class="btn btn-danger">Delete</a>
+                                <div class="d-flex gap-2">
+                                    <a href="/asignaturas/edit/<%= asignatura._id %>" class="btn btn-info">Edit</a>
+                                    <a href="/asignaturas/delete/<%= asignatura._id %>" class="btn btn-danger">Delete</a>
+                                </div>
                             </td>
                         <% } %>
                     </tr>
@@ -82,6 +63,3 @@
     </table>
 </div>
 <% include partials/_footer %>
-
-
-
