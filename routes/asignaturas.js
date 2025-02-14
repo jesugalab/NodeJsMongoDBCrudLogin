@@ -53,19 +53,25 @@ router.post('/signupAsignatura', isAuthenticatedAdmin, async (req, res) => {
 
 // Ruta para listar todas las asignaturas
 router.get('/asignaturas', isAuthenticated, async (req, res) => {
-  try {
-    let asignaturas;
-    if (req.user.rol.toLowerCase() === 'admin') {
-      asignaturas = await cargarAsignaturasRegeneradaCompleta();
-    } else {
-      asignaturas = await Asignatura.findByUser(req.user._id, req.user.rol);
+    try {
+        let asignaturas;
+        if (req.user.rol.toLowerCase() === 'admin') {
+            asignaturas = await cargarAsignaturasRegeneradaCompleta();
+        } else {
+            // Si es profesor o alumno, obtener solo las asignaturas del usuario
+            asignaturas = await Asignatura.findByUser(req.user._id, req.user.rol);
+        }
+
+        res.render('asignaturas', {
+            asignaturas: asignaturas,
+            user: req.user
+        });
+    } catch (error) {
+        console.error('Error obteniendo las asignaturas:', error);
+        res.status(500).send('Error al cargar las asignaturas.');
     }
-    res.render('asignaturas', { asignaturas, user: req.user });
-  } catch (error) {
-    console.error('Error obteniendo las asignaturas:', error);
-    res.status(500).send('Error al cargar las asignaturas.');
-  }
 });
+
 
 // Ruta para eliminar una asignatura (por Admin)
 router.get('/asignaturas/delete/:id', isAuthenticatedAdmin, async (req, res) => {
@@ -160,44 +166,55 @@ router.post('/signupAsignaturaProfesor', isAuthenticated, async (req, res) => {
 // Método para cargar asignaturas con su estudio
 const cargarAsignaturasConEstudio = async () => {
   try {
-    const asignaturas = await Asignatura.find().lean();
-    const estudios = await Estudio.find().lean();
-    const estudiosMap = {};
-    estudios.forEach(estudio => {
-      estudiosMap[estudio._id] = estudio;
-    });
+      const asignaturas = await Asignatura.find().lean();
+      const estudios = await Estudio.find().lean();
+      const estudiosMap = {};
+      estudios.forEach(estudio => {
+          estudiosMap[estudio._id] = estudio;
+      });
 
-    return asignaturas.map(asignatura => ({
-      ...asignatura,
-      estudio: estudiosMap[asignatura.estudio_id] || { nombre: "No encontrado", tipo: "-" }
-    }));
+      return asignaturas.map(asignatura => ({
+          ...asignatura,
+          estudio: estudiosMap[asignatura.estudio_id] || {
+              nombre: "No encontrado",
+              tipo: "-"
+          }
+      }));
   } catch (error) {
-    console.error('Error obteniendo las asignaturas con estudio:', error);
-    return [];
+      console.error('Error obteniendo las asignaturas con estudio:', error);
+      return [];
   }
 };
 
 // Método para cargar asignaturas con todos los datos completos
+// Método para cargar asignaturas con todos los datos completos
 const cargarAsignaturasRegeneradaCompleta = async () => {
   try {
-    const asignaturas = await Asignatura.find().lean();
-    const estudios = await Estudio.find().lean();
-    const usuarios = await Usuario.find().lean();
-    const estudiosMap = {};
-    const usuariosMap = {};
+      const asignaturas = await Asignatura.find().lean();
+      const estudios = await Estudio.find().lean();
+      const usuarios = await Usuario.find().lean();
+      const estudiosMap = {};
+      const usuariosMap = {};
 
-    estudios.forEach(estudio => estudiosMap[estudio._id] = estudio);
-    usuarios.forEach(usuario => usuariosMap[usuario._id] = usuario);
+      estudios.forEach(estudio => estudiosMap[estudio._id] = estudio);
+      usuarios.forEach(usuario => usuariosMap[usuario._id] = usuario);
 
-    return asignaturas.map(asignatura => ({
-      ...asignatura,
-      estudio: estudiosMap[asignatura.estudio_id] || { nombre: "No encontrado", tipo: "-" },
-      listaAlumnos: asignatura.listaAlumnos.map(id => usuariosMap[id] || { nombre: "No encontrado" }),
-      listaProfesores: asignatura.listaProfesores.map(id => usuariosMap[id] || { nombre: "No encontrado" })
-    }));
+      return asignaturas.map(asignatura => ({
+          ...asignatura,
+          estudio: estudiosMap[asignatura.estudio_id] || {
+              nombre: "No encontrado",
+              tipo: "-"
+          },
+          listaAlumnos: asignatura.listaAlumnos.map(id => usuariosMap[id] || {
+              nombre: "No encontrado"
+          }),
+          listaProfesores: asignatura.listaProfesores.map(id => usuariosMap[id] || {
+              nombre: "No encontrado"
+          })
+      }));
   } catch (error) {
-    console.error('Error obteniendo las asignaturas completas:', error);
-    return [];
+      console.error('Error obteniendo las asignaturas completas:', error);
+      return [];
   }
 };
 // Código para hacer funcional el boton "Edit" de las asignaturas
