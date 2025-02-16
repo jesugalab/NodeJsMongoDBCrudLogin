@@ -1,3 +1,5 @@
+Creo que queda solo mostrar los alumnos de un profesor... 
+
 HACIENDO:
 
 - Jesus: por ahora nada
