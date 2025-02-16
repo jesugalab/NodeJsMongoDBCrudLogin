@@ -13,7 +13,7 @@ EstudioSchema.methods.findAll = async function () {
 };
 
 EstudioSchema.methods.findById = async function (id) {
-  return await Task.findById(id)
+  return await Estudio.findById(id)
     .then(result => {return result})
     .catch(error => console.log(error));
 };

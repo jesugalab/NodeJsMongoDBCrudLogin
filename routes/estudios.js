@@ -51,63 +51,70 @@ return res.redirect('/signupEstudio'); // Redirige a la misma página
   }
 });
 
+// Código para editar el estudio. 
+
+// Ruta GET para mostrar el formulario de edición de estudio
+router.get('/estudios/edit/:id', isAuthenticated, async (req, res) => {
+  try {
+    // Extraemos el 'id' de los parámetros de la URL
+    const { id } = req.params;
+
+    // Busca el software en la base de datos por su ID usando el modelo Estudio
+    const estudio = await Estudio.findOne({ _id: id }).lean();
+
+    // Si no se encuentra el software, respondemos con un error 404
+    if (!estudio) {
+      req.flash('errorMessage', 'No se encontró el estudio.');
+      return res.redirect('/estudios');
+    }
+ res.render('edit_estudio', { estudio: estudio , messages: req.flash() });
+  } catch (error) {
+    // Si ocurre algún error, lo mostramos en la consola y enviamos una respuesta de error 500
+    console.error('Error al cargar el estudio para edición:', error);
+    res.status(500).send('Error al cargar el estucio para edición');
+  }
+});
+
+// Ruta POST para actualizar el software después de que se haya editado
+router.post('/estudios/edit/:id', isAuthenticated, async (req, res) => {
+  try {
+    // Extraemos el 'id' de los parámetros de la URL
+    const { id } = req.params;
+    
+    // Extraemos los valores enviados desde el formulario de edición
+    const { nombre, tipo } = req.body;
+ // Utiliza el 'id' del estudio para encontrarlo y luego lo actualiza con los nuevos valores
+    await Estudio.updateOne({ _id: id }, { nombre, tipo });
+
+    // Después de actualizar, se guarda un mensaje flash que indica que la actualización fue exitosa
+    req.flash('successMessage', 'Estudio actualizado correctamente.');
+
+    // Redirige al usuario a la lista de estucios para mostrar la actualización
+    res.redirect('/estudios');
+  } catch (error) {
+    // Si ocurre algún error durante la actualización, se captura y se muestra en la consola
+    // Luego se envía una respuesta de error 500
+    console.error('Error al actualizar el estudio:', error);
+    res.status(500).send('Error al actualizar el estudio.');
+  }
+});
+
+
+// Ruta para eliminar un estudio
+router.get('/estudios/delete/:id', isAuthenticated, async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Elimina la asignatura por su ID
+    await Estudio.deleteOne({ _id: id });
+
+    // Redirige al usuario a la lista de estudios
+    res.redirect('/estudios');
+  } catch (error) {
+    console.error('Error al eliminar el estudio:', error);
+    res.status(500).send('Error al eliminar el estudio. Por favor, inténtalo de nuevo.');
+  }
+});
+
 module.exports = router;
 
-/*
-
-
-const express = require('express');
-const router = express.Router();
-const Estudio = require('../models/estudio'); // Corregír el nombre del modelo
-
-// Middleware isAuthenticated definido directamente aquí
-const isAuthenticated = (req, res, next) => {
-  if (req.isAuthenticated()) { // Verifica si el usuario está autenticado
-    return next(); // Si está autenticado, continúa con la siguiente función
-  }
-  res.redirect('/'); // Si no está autenticado, redirige al inicio
-};
-
-// Ruta para mostrar el formulario de creación de asignaturas
-router.get('/signupEstudio', isAuthenticated, (req, res) => {
-  res.render('signupEstudio'); // Renderiza la vista ejs
-});
-
-// Ruta para procesar el formulario de creación de asignaturas
-router.post('/signupEstudio', isAuthenticated, async (req, res) => {
-  const { nombre, tipo} = req.body;
-
-  try {
-    // Crea una nuevo estudio
-    const nuevoEstudio = new Estudio({
-      nombre,
-      tipo
-    });
-    // Guarda el estudio en la base de datos
-    await nuevoEstudio.save();
-
-    // Redirige al usuario a la página de perfil o a la lista de asignaturas
-    res.redirect('/profile');
-  } catch (error) {
-    console.error('Error al crear el estudio:', error);
-    res.status(500).send('Error al crear el estudio. Por favor, inténtalo de nuevo.');
-  }
-});
-
-// Ruta para listar todas las asignaturas del usuario
-router.get('/Estudios', isAuthenticated, async (req, res) => {
-  try {
-    // Busca las asignaturas del usuario autenticado
-    const estudios = await Estudio.find({ usuario: req.user._id });
-
-    // Renderiza la vista con las asignaturas
-    res.render('estudios', { asignaturas });
-  } catch (error) {
-    console.error('Error al obtener los estudios:', error);
-    res.status(500).send('Error al obtener los estudios. Por favor, inténtalo de nuevo.');
-  }
-});
-
-module.exports = router;
-
-*/
