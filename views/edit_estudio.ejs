@@ -1,0 +1,25 @@
+<% include partials/_header %>
+
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-body"></div>
+      <h2>Editar Estudio</h2>
+
+      <form action="/estudios/edit/<%= estudio._id %>" method="POST">
+        <div class="mb-3">
+          <label class="form-label">Nombre</label>
+          <input type="text" class="form-control" name="nombre" value="<%= estudio.nombre %>" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Tipo</label>
+          <input type="text" class="form-control" name="tipo" value="<%= estudio.tipo %>" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        <a href="/estudios" class="btn btn-secondary">Cancelar</a>
+      </form>
+    </div>
+  </div>
+</div>
+
+<% include partials/_footer %>
