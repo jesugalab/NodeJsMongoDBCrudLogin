@@ -28,6 +28,7 @@ router.get('/software', isAuthenticated, async (req, res) => {
 
       const asignaturaMap = {};
       asignaturas.forEach(asignatura => {
+        if (asignatura.listaProfesores.includes(req.user.id) || req.user.rol.toLowerCase() == "admin")
           asignaturaMap[asignatura._id] = asignatura;
       });
 

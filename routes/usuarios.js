@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const passport = require('passport');
 const Usuario = require('../models/user');
+const Asignatura = require('../models/asignatura');
 
 // Middleware isAuthenticated definido directamente aquí. Modificado para comprobar si el usuario es un Admin.
 const isAuthenticatedAdmin = (req, res, next) => {
@@ -56,7 +57,14 @@ router.get('/profesores', isAuthenticatedAdmin, async (req, res) => {
   // Esto solo puede ser visto por Admins y Profesores.
 router.get('/alumnos', isAuthenticatedAdminProf, async (req, res) => {
     try {
-      const usuarios = await Usuario.find({ rol: "Alumno" }); // Obtener todos los alumnos
+      let usuarios = [];
+
+if (req.user.rol.toLowerCase() === "profesor") {
+  usuarios = (await obtenerAlumnosDeProfesor(req.user.id)) || [];
+} else if (req.user.rol.toLowerCase() === "admin") {
+  usuarios = await Usuario.find({ rol: "Alumno" } ); // Obtener todos los alumnos
+}
+    
       res.render('alumnos', { user: req.user, usuarios, messages: req.flash() });
     } catch (error) {
       console.error('Error obteniendo los alumnos:', error);
@@ -127,4 +135,21 @@ router.post('/usuarios/update/:id', isAuthenticated, async (req, res) => {
   }
 });
 
+async function obtenerAlumnosDeProfesor(profesorId) {
+  try {
+    // 1. Buscar las asignaturas donde el profesor está asignado
+    const asignaturas = await Asignatura.find({ listaProfesores: profesorId });
+
+    // 2. Extraer todos los IDs de alumnos de esas asignaturas
+    const alumnosIds = asignaturas.flatMap(asignatura => asignatura.listaAlumnos);
+
+    // 3. Buscar los alumnos por sus IDs
+    const alumnos = await Usuario.find({ _id: { $in: alumnosIds } });
+
+    return alumnos; // Devuelve la lista de alumnos
+  } catch (error) {
+    console.error("Error al obtener alumnos del profesor:", error);
+    return [];
+  }
+}
 module.exports = router;
