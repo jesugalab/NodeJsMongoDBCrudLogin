@@ -2,10 +2,10 @@ Creo que esta todo ...
 
 HACIENDO:
 
-- Jesus: por ahora nada
-- David: Mostrar Software y asignaturas de profesores y alumnos
+- Jesus: 
+- David: 
 - Rodrigo:
-- Alvaro: Estilos
+- Alvaro: 
 - Felipe:
 
 
@@ -45,25 +45,16 @@ Hecho:
 - Consultar Todas las Asignaturas (admin)
 - Consultar Todos los Software (admin)
 
-Se que Falta:
-
-- Añadir y Eliminar software a Asignatura
-
+General:
+No se elimina id de profesor y de alumnos de las asignaturas, cuando estos 
 - Hacer el diagrama de las entidades
-- Centrar los formularios (Como minimo)
-- Botones de software, estudios, alumnos y profesores.
-- 
+
+Admin:
+- Boton de matricular, dividirlo en dos añadir y eliminar.
 
 Alumno :
-- mostrar asignaturas
-- mostrar el listado de sofware de una asignatura
-- mostrar los detalles de un software
 
 Profesor:
-- mostrar asignaturas
-- mostrar alumnos de sus asignaturas
-- mostrar el listado de sofware de una asignatura
-- añadir y eliminar de sofware de una asignatura
 
 
-Comprobar si hay que hacer mas. Creo que esto es lo minimo.
+
