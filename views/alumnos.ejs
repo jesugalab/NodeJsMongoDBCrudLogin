@@ -25,9 +25,9 @@
             <td><%= usuario.email %></td>
             <%if (user.rol.toLowerCase() == "admin") {%>
               <td>              
-                <div class="d-flex gap-2">
-                  <a href="/usuarios/edit/<%= usuario._id %>" class="btn btn-info">Edit</a>
-                  <a href="/usuarios/delete/<%= usuario._id %>" class="btn btn-danger">Delete</a>
+                <div class="btn-group" role="group">
+                  <a href="/usuarios/edit/<%= usuario._id %>" class="btn btn-info btn-sm me-1" style="width: 60px;">Edit</a>
+                  <a href="/usuarios/delete/<%= usuario._id %>" class="btn btn-danger btn-sm" style="width: 60px;">Delete</a>
                 </div>
               </td>
             <% } %>
