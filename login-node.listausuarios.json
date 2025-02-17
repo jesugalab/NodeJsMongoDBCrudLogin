@@ -1,16 +1,5 @@
 [{
   "_id": {
-    "$oid": "67a7ba860661bbb0775f564f"
-  },
-  "email": "a@a.com",
-  "nombre": "Jesús",
-  "apellidos": "Galán",
-  "rol": "Admin",
-  "password": "$2a$10$Cy1fIvdA8gunNsbjr720G.bSIKTnlRk35iikGUd1PR/2CQh0NagIC",
-  "__v": 0
-},
-{
-  "_id": {
     "$oid": "67a7bad40661bbb0775f5659"
   },
   "email": "b@b.com",
@@ -29,5 +18,71 @@
   "apellidos": "Cabrón",
   "rol": "Alumno",
   "password": "$2a$10$JXXIbbeW5vwlgidZd9Uc9e3JCGp7IuKI3Xl7iAJZOMlVnx54dST1W",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67aa1a280e3f6e2814c53c6f"
+  },
+  "email": "fe@a.com",
+  "nombre": "feo",
+  "apellidos": "aaaaa",
+  "rol": "Alumno",
+  "password": "$2a$10$ZzD8sCP7LzDjU0ZmGN9sBuJxQepG2j.TEte.3QeWz7.7a3jBJq94S",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67ac8a88584ef73f7d229d3c"
+  },
+  "email": "qq@aaa.com",
+  "nombre": "feo",
+  "apellidos": "ta",
+  "rol": "Alumno",
+  "password": "$2a$10$G4igKq725IDdxy4O7OfbXe5Q99Fle9ZFzRPvLv08t2c3/KauAXIUe",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67ac8b29584ef73f7d229d53"
+  },
+  "email": "oo@ooo.con",
+  "nombre": "ooo",
+  "apellidos": "ooo",
+  "rol": "Alumno",
+  "password": "$2a$10$jqkGTeJslqQczBP3UoRaIunRMduotB0GCAoMsjW2rQ5smlvYK80qi",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67acc2be3dd441429554efaa"
+  },
+  "email": "a@a.com",
+  "nombre": "Jesús",
+  "apellidos": "Galán",
+  "rol": "Admin",
+  "password": "$2a$10$Cy1fIvdA8gunNsbjr720G.bSIKTnlRk35iikGUd1PR/2CQh0NagIC",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67b11be72ad7727b61f7e17e"
+  },
+  "email": "s@s.com",
+  "nombre": "Super",
+  "apellidos": "Seguro",
+  "rol": "Profesor",
+  "password": "$2a$10$4GVRcvtAZX9T.bMAfJ9M..r4JmppxRRxuvAb5KEmawrN0SSRe0L/y",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67b137191b0f2a24df698441"
+  },
+  "email": "aa@aa.com",
+  "nombre": "aaasssdd",
+  "apellidos": "ddssaa",
+  "rol": "Profesor",
+  "password": "$2a$10$VvQFy70Zl8/Xw3NPGRkIEeDNh0OaQ70.eda425Xf/icFhRgJ3SjC2",
   "__v": 0
 }]

@@ -7,7 +7,99 @@
   "estudio_id": {
     "$oid": "67a91cddd7cf6e5d2038977e"
   },
-  "listaAlumnos": [],
+  "listaProfesores": [
+    {
+      "$oid": "67a7bad40661bbb0775f5659"
+    }
+  ],
+  "__v": 24,
+  "listaAlumnos": [
+    {
+      "$oid": "67aa1a280e3f6e2814c53c6f"
+    },
+    {
+      "$oid": "67ac8a88584ef73f7d229d3c"
+    },
+    {
+      "$oid": "67ac8b29584ef73f7d229d53"
+    },
+    {
+      "$oid": "67a7bb280661bbb0775f565f"
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "67aba7dc294078458c58caba"
+  },
+  "nombre": "D I",
+  "curso": 2,
+  "estudio_id": {
+    "$oid": "67a91cddd7cf6e5d2038977e"
+  },
+  "listaAlumnos": [
+    {
+      "$oid": "67a7bb280661bbb0775f565f"
+    }
+  ],
   "listaProfesores": [],
-  "__v": 0
+  "__v": 1
+},
+{
+  "_id": {
+    "$oid": "67abaae1301136a14291c56a"
+  },
+  "nombre": "vvv",
+  "curso": 1,
+  "estudio_id": {
+    "$oid": "67a91cddd7cf6e5d2038977e"
+  },
+  "listaAlumnos": [
+    {
+      "$oid": "67aa1a280e3f6e2814c53c6f"
+    }
+  ],
+  "listaProfesores": [],
+  "__v": 3
+},
+{
+  "_id": {
+    "$oid": "67abad22e9a4bfbdb4750f9e"
+  },
+  "nombre": "a",
+  "curso": 1,
+  "estudio_id": {
+    "$oid": "67a91cddd7cf6e5d2038977e"
+  },
+  "listaAlumnos": [
+    {
+      "$oid": "67a7bb280661bbb0775f565f"
+    }
+  ],
+  "listaProfesores": [],
+  "__v": 5
+},
+{
+  "_id": {
+    "$oid": "67b11c612ad7727b61f7e193"
+  },
+  "nombre": "Seguridad en Red",
+  "curso": 1,
+  "estudio_id": {
+    "$oid": "67a91cddd7cf6e5d2038977e"
+  },
+  "listaAlumnos": [
+    {
+      "$oid": "67aa1a280e3f6e2814c53c6f"
+    },
+    {
+      "$oid": "67ac8a88584ef73f7d229d3c"
+    }
+  ],
+  "listaProfesores": [
+    {
+      "$oid": "67b11be72ad7727b61f7e17e"
+    }
+  ],
+  "__v": 3
 }]
