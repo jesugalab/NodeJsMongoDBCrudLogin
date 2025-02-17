@@ -26,20 +26,30 @@
                         <td><%= asignatura.estudio.nombre %>  -  <%= asignatura.estudio.tipo  %></td>
                         <td>
                             <% if (asignatura.listaAlumnos && asignatura.listaAlumnos.length > 0) { %>
-                                <%- asignatura.listaAlumnos
-                                .map(alumno => `<p>${alumno.nombre} ${alumno.apellidos} (${alumno.email})</p>`)
-                                .join(" ")
-                                %>
+                                <% let alumnosValidos = asignatura.listaAlumnos.filter(alumno => alumno.nombre !== "No encontrado"); %>
+                                <% if (alumnosValidos.length > 0) { %>
+                                    <%- alumnosValidos
+                                        .map(alumno => `<p>${alumno.nombre} ${alumno.apellidos} (${alumno.email})</p>`)
+                                        .join(" ")
+                                    %>
+                                <% } else { %>
+                                    <p>Sin Alumnos</p>
+                                <% } %>
                             <% } else { %>
                                 <p>Sin Alumnos</p>
                             <% } %>
                         </td>
                         <td>
                             <% if (asignatura.listaProfesores && asignatura.listaProfesores.length > 0) { %>
-                                <%- asignatura.listaProfesores
-                                .map(profesor => `<p>${profesor.nombre} ${profesor.apellidos} (${profesor.email})</p>`)
-                                .join(" ")
-                                %>
+                                <% let profesoresValidos = asignatura.listaProfesores.filter(profesor => profesor.nombre !== "No encontrado"); %>
+                                <% if (profesoresValidos.length > 0) { %>
+                                    <%- profesoresValidos
+                                        .map(profesor => `<p>${profesor.nombre} ${profesor.apellidos} (${profesor.email})</p>`)
+                                        .join(" ")
+                                    %>
+                                <% } else { %>
+                                    <p>Sin Profesores</p>
+                                <% } %>
                             <% } else { %>
                                 <p>Sin Profesores</p>
                             <% } %>
