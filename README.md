@@ -3,8 +3,8 @@ Creo que esta todo ...
 HACIENDO:
 
 - Jesus: 
-- David: 
-- Rodrigo:
+- David: Lo del boton de matricular y desmatricular
+- Rodrigo: Ver el software desde las asignaturas
 - Alvaro: Borrado de alumnos y profesores de las asignaturas.
 - Felipe:
 
@@ -46,8 +46,9 @@ Hecho:
 - Consultar Todos los Software (admin)
 
 General:
-No se elimina id de profesor y de alumnos de las asignaturas, cuando estos se borran de la bbdd
-- Hacer el diagrama de las entidades
+-No se elimina id de profesor y de alumnos de las asignaturas, cuando estos se borran de la bbdd.
+- Hacer el diagrama de las entidades.
+- Ver el software de cada asignatura desde la pantalla de asignaturas.
 
 Admin:
 - Boton de matricular, dividirlo en dos añadir y eliminar.
