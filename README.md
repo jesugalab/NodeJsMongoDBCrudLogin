@@ -5,7 +5,7 @@ HACIENDO:
 - Jesus: 
 - David: 
 - Rodrigo:
-- Alvaro: 
+- Alvaro: Borrado de alumnos y profesores de las asignaturas.
 - Felipe:
 
 
@@ -46,7 +46,7 @@ Hecho:
 - Consultar Todos los Software (admin)
 
 General:
-No se elimina id de profesor y de alumnos de las asignaturas, cuando estos 
+No se elimina id de profesor y de alumnos de las asignaturas, cuando estos se borran de la bbdd
 - Hacer el diagrama de las entidades
 
 Admin:
