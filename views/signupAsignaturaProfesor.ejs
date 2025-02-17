@@ -1,27 +1,26 @@
 <% include partials/_header %>
 
-<h2 class="text-center mt-4">Edicion de las Asignaturas de Profesores</h2>
+<h2 class="text-center mt-4">Edición de las Asignaturas de Profesores</h2>
 <div class="row justify-content-center mt-3">
     <div class="col-md-5">
         <div class="card">
             <div class="card-body">
                 <form action="/signupAsignaturaProfesor" method="POST">
                     <p>
-                        <!-- Desplegable para seleccionar un alumno -->
-                        <select name="usuario_id" required>
+                        <select name="usuario_id" id="usuario_id" required>
                             <% if (usuarios && usuarios.length > 0) { %>
                                 <% usuarios.forEach((usuario, index) => { %>
-                                    <option value="<%= usuario._id %>" <%= index === usuarios.length - 1 ? 'selected' : '' %>>
+                                    <option value="<%= usuario._id %>" data-asignaturas="<%= JSON.stringify(usuario.asignaturas) %>" <%= index === usuarios.length - 1 ? 'selected' : '' %>>
                                         <%= usuario.nombre + " " + usuario.apellidos %>
                                     </option>
                                 <% }) %>
                             <% } else { %>
-                                <option value="">No hay alumnos disponibles</option>
+                                <option value="">No hay profesores disponibles</option>
                             <% } %>
                         </select>
                     </p>
                     <p>
-                        <select name="asignatura_id" required>
+                        <select name="asignatura_id" id="asignatura_id" required>
                             <% if (asignaturas && asignaturas.length > 0) { %>
                                 <% asignaturas.forEach((asignatura, index) => { %>
                                     <option value="<%= asignatura._id %>" <%= index === asignaturas.length - 1 ? 'selected' : '' %>>
@@ -34,8 +33,8 @@
                         </select>
                     </p>
                     <p>
-                        <button action="/signupAsignaturaAlumno" class="btn btn-primary" type="submit">
-                            Matricular - Desmatricular al Alumno
+                        <button id="matriculaButton" class="btn btn-primary" type="submit">
+                            Asignar al Profesor
                         </button>
                     </p>
                 </form>
@@ -51,5 +50,31 @@
         </div>
     </div>
 <% } %>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const usuarioSelect = document.getElementById('usuario_id');
+    const asignaturaSelect = document.getElementById('asignatura_id');
+    const matriculaButton = document.getElementById('matriculaButton');
+
+    function updateButtonText() {
+      const selectedUsuario = usuarioSelect.options[usuarioSelect.selectedIndex];
+      const selectedAsignatura = asignaturaSelect.value;
+      const asignaturasProfesor = JSON.parse(selectedUsuario.dataset.asignaturas);
+
+      if (asignaturasProfesor.includes(selectedAsignatura)) {
+        matriculaButton.textContent = 'Desasignar al Profesor';
+      } else {
+        matriculaButton.textContent = 'Asignar al Profesor';
+      }
+    }
+
+    usuarioSelect.addEventListener('change', updateButtonText);
+    asignaturaSelect.addEventListener('change', updateButtonText);
+
+    // Llamar a la función inicialmente para establecer el texto correcto
+    updateButtonText();
+  });
+</script>
 
 <% include partials/_footer %>
