@@ -13,4 +13,12 @@
   "nombre": "DAW",
   "tipo": "Grado Superior",
   "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67b11ba52ad7727b61f7e177"
+  },
+  "nombre": "Seguridad Informatica",
+  "tipo": "Master",
+  "__v": 0
 }]
