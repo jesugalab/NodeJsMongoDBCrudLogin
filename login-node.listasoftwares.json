@@ -1,0 +1,44 @@
+[{
+  "_id": {
+    "$oid": "67aa2d93c9b1f84d111d23d6"
+  },
+  "descripcion": "MySQL",
+  "link": "www.",
+  "asignatura_id": {
+    "$oid": "67a93ad2481455eef85d0aec"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67b132fd485b43da76ad447f"
+  },
+  "descripcion": "aaa",
+  "link": "www",
+  "asignatura_id": {
+    "$oid": "67b11c612ad7727b61f7e193"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67b1330f485b43da76ad4484"
+  },
+  "descripcion": "bbb",
+  "link": "www.",
+  "asignatura_id": {
+    "$oid": "67b11c612ad7727b61f7e193"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67b13342485b43da76ad4489"
+  },
+  "descripcion": "ccc",
+  "link": "www",
+  "asignatura_id": {
+    "$oid": "67b11c612ad7727b61f7e193"
+  },
+  "__v": 0
+}]

@@ -20,7 +20,7 @@
           <tr>
             <td><%= software._id %></td>
             <td><%= software.descripcion %></td>
-            <td><%= software.link %></td>
+            <td><a href="https://<%= software.link %>" target="_blank" rel="noopener noreferrer" style="text-decoration: none"><%= software.link %></a></td>
             <td><%= software.asignatura.nombre %> - <%= software.asignatura.curso %></td>
             <% if (user.rol.toLowerCase() != "alumno" ) { %> 
               <td>
