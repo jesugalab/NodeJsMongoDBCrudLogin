@@ -89,15 +89,35 @@ router.get('/asignaturas/delete/:id', isAuthenticatedAdmin, async (req, res) => 
 // Ruta para agregar asignaturas a un alumno
 router.get('/signupAsignaturaAlumno', isAuthenticated, async (req, res) => {
   try {
-    const usuarios = await Usuario.find({ rol: "Alumno" });
-    const asignaturas = await cargarAsignaturasConEstudio();
-    res.render('signupAsignaturaAlumno', { usuarios, asignaturas, messages: req.flash() });
+      const usuarios = await Usuario.find({
+          rol: "Alumno"
+      }).lean(); // Obtener todos los usuarios con rol "Alumno"
+
+      const asignaturas = await cargarAsignaturasConEstudio(); // Obtener todas las asignaturas con la información de sus estudios
+
+      // Modificamos la ruta para obtener las asignaturas en las que cada alumno está matriculado
+      const usuariosConAsignaturas = await Promise.all(usuarios.map(async (usuario) => {
+          const asignaturasAlumno = await Asignatura.find({
+              listaAlumnos: usuario._id
+          }).select('_id').lean(); // Obtener solo los IDs de las asignaturas en las que el alumno está matriculado
+
+          return {
+              ...usuario,
+              asignaturas: asignaturasAlumno.map(a => a._id.toString()) // Mapear los IDs de las asignaturas a strings
+          };
+      }));
+
+      // Renderizar la vista 'signupAsignaturaAlumno' y pasar los datos necesarios
+      res.render('signupAsignaturaAlumno', {
+          usuarios: usuariosConAsignaturas, // Pasar la información de los usuarios con las asignaturas en las que están matriculados
+          asignaturas, // Pasar todas las asignaturas disponibles
+          messages: req.flash() // Pasar los mensajes flash para mostrar al usuario
+      });
   } catch (error) {
-    console.error('Error obteniendo usuarios o asignaturas:', error);
-    res.status(500).send('Error al cargar usuarios o asignaturas.');
+      console.error('Error obteniendo usuarios o asignaturas:', error);
+      res.status(500).send('Error al cargar usuarios o asignaturas.');
   }
 });
-
 // Ruta para procesar el formulario de añadir asignaturas a un alumno
 router.post('/signupAsignaturaAlumno', isAuthenticated, async (req, res) => {
   const { usuario_id, asignatura_id } = req.body;
@@ -128,9 +148,23 @@ router.post('/signupAsignaturaAlumno', isAuthenticated, async (req, res) => {
 // Ruta para agregar asignaturas a un profesor
 router.get('/signupAsignaturaProfesor', isAuthenticated, async (req, res) => {
   try {
-    const usuarios = await Usuario.find({ rol: "Profesor" });
+    const usuarios = await Usuario.find({ rol: "Profesor" }).lean();
     const asignaturas = await cargarAsignaturasConEstudio();
-    res.render('signupAsignaturaProfesor', { usuarios, asignaturas, messages: req.flash() });
+    
+    // Obtener las asignaturas de cada profesor
+    const usuariosConAsignaturas = await Promise.all(usuarios.map(async (usuario) => {
+      const asignaturasProfesor = await Asignatura.find({ listaProfesores: usuario._id }).select('_id').lean();
+      return {
+        ...usuario,
+        asignaturas: asignaturasProfesor.map(a => a._id.toString())
+      };
+    }));
+
+    res.render('signupAsignaturaProfesor', { 
+      usuarios: usuariosConAsignaturas, 
+      asignaturas, 
+      messages: req.flash() 
+    });
   } catch (error) {
     console.error('Error obteniendo usuarios o asignaturas:', error);
     res.status(500).send('Error al cargar usuarios o asignaturas.');
