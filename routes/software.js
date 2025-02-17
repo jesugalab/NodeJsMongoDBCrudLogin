@@ -28,6 +28,7 @@ router.get('/software', isAuthenticated, async (req, res) => {
 
       const asignaturaMap = {};
       asignaturas.forEach(asignatura => {
+
           asignaturaMap[asignatura._id] = asignatura;
       });
 
