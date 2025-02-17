@@ -241,10 +241,14 @@ const cargarAsignaturasRegeneradaCompleta = async () => {
               tipo: "-"
           },
           listaAlumnos: asignatura.listaAlumnos.map(id => usuariosMap[id] || {
-              nombre: "No encontrado"
+              nombre: "No encontrado",
+              apellidos: "",
+              email: ""
           }),
           listaProfesores: asignatura.listaProfesores.map(id => usuariosMap[id] || {
-              nombre: "No encontrado"
+              nombre: "No encontrado",
+              apellidos: "",
+              email: ""
           })
       }));
   } catch (error) {
