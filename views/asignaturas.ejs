@@ -21,7 +21,9 @@
                 <% asignaturas.forEach(asignatura => { %>
                     <tr>
                         <td><%= asignatura._id %></td>
-                        <td><%= asignatura.nombre %></td>
+                        <td>
+                            <a href="/asignaturas/<%= asignatura._id %>/software"><%= asignatura.nombre %></a>
+                        </td>
                         <td><%= asignatura.curso %></td>
                         <td><%= asignatura.estudio.nombre %>  -  <%= asignatura.estudio.tipo  %></td>
                         <td>

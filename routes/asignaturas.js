@@ -3,6 +3,7 @@ const router = express.Router();
 const Asignatura = require('../models/asignatura');
 const Estudio = require('../models/estudio');
 const Usuario = require('../models/user');
+const Software = require('../models/software');
 
 // Middleware isAuthenticated
 const isAuthenticated = (req, res, next) => {
@@ -258,6 +259,30 @@ router.post('/asignaturas/edit/:id', isAuthenticatedAdmin, async (req, res) => {
   } catch (error) {
     console.error('Error al actualizar la asignatura:', error);
     res.status(500).send('Error al actualizar la asignatura.'); // Responde con un error 500 en caso de fallo
+  }
+});
+// Ruta para mostrar el software asociado a una asignatura
+router.get('/asignaturas/:id/software', isAuthenticated, async (req, res) => {
+  try {
+    const { id } = req.params; // Obtiene el ID de la asignatura desde los parámetros de la URL
+
+    // Busca la asignatura por su ID
+    const asignatura = await Asignatura.findById(id).lean();
+
+    // Si no se encuentra la asignatura, redirige con un mensaje de error
+    if (!asignatura) {
+      req.flash('errorMessage', 'Asignatura no encontrada.');
+      return res.redirect('/asignaturas');
+    }
+
+    // Busca el software asociado a la asignatura
+    const software = await Software.find({ asignatura_id: id }).lean();
+
+    // Renderiza la vista con los datos de la asignatura y el software asociado
+    res.render('software_asignatura', { asignatura, software, user: req.user, messages: req.flash() });
+  } catch (error) {
+    console.error('Error al cargar el software de la asignatura:', error);
+    res.status(500).send('Error al cargar el software de la asignatura.');
   }
 });
 
