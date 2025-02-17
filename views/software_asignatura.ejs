@@ -1,33 +1,57 @@
 <% include partials/_header %>
 
 <div class="container mt-4">
-    <div class="card">
-    <div class="card-body">
-        <h2>Software de la Asignatura: <%= asignatura.nombre %></h2>
+    <div class="row">
+        <div class="col-md-5">
+            <div class="card">
+                <div class="card-body">
+                    <form action="/signupSoftware/<%=asignatura._id%>" method="post">
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="link" placeholder="Title">
+                        </div>
+                        <div class="form-group">
+                            <textarea class="form-control" name="descripcion" cols="80" placeholder="Add a Description"></textarea>
+                        </div>
+                        <button class="btn btn-primary" type="submit">Add</button>
+                    </form>
+                </div>
+            </div>
+        </div>
 
-        <% if (software && software.length > 0) { %>
-        <table class="table table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th>Descripción</th>
-                    <th>Enlace</th>
-                </tr>
-            </thead>
-            <tbody>
-            <% software.forEach(sw => { %>
-                <tr>
-                    <td><%= sw.descripcion %></td>
-                    <td><a href="<%= sw.link %>" target="_blank"><%= sw.link %></a></td>
-                </tr>
-            <% }) %>
-            </tbody>
-        </table>
-        <% } else { %>
-        <p>No hay software asociado a esta asignatura.</p>
-        <% } %>
+        <div class="col-md-7">
+            <div class="card">
+                <div class="card-body">
+                    <h2>Software de la Asignatura: <%= asignatura.nombre %></h2>
+                    <% if (software && software.length > 0) { %>
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Descripción</th>
+                                    <th>Enlace</th>
+                                    <th>Operaciones</th>
 
-        <a href="/asignaturas" class="btn btn-secondary">Volver a la lista de asignaturas</a>
-    </div>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% software.forEach(sw => { %>
+                                    <tr>
+                                        <td><%= sw.descripcion %></td>
+                                        <td><a href="https://<%= sw.link %>" target="_blank"><%= sw.link %></a></td>
+                                        <td>
+                                            <a href="/software/edit/<%= sw._id %>" class="btn btn-info btn-sm me-1" style="width: 60px;">Edit</a>
+                                            <a href="/software/delete/<%= sw._id %>" class="btn btn-danger btn-sm" style="width: 60px;">Delete</a>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    <% } else { %>
+                        <p>No hay software asociado a esta asignatura.</p>
+                    <% } %>
+                    <a href="/asignaturas" class="btn btn-secondary">Volver a la lista de asignaturas</a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

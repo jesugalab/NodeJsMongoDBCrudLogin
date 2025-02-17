@@ -82,6 +82,31 @@ router.post('/signupSoftware', isAuthenticated, async (req, res) => {
   }
 });
 
+
+// Ruta para procesar el formulario de creación de software de una asignatura concreta
+router.post('/signupSoftware/:id', isAuthenticated, async (req, res) => {
+  const { descripcion, link} = req.body;
+  const asignatura_id = req.params.id;
+
+
+  try {
+    // Crea una nueva asignatura
+    const nuevoSoftware = new Software({
+      descripcion,
+      link,
+      asignatura_id,
+    });
+
+    // Guarda el software en la base de datos
+    await nuevoSoftware.save();
+    req.flash('signupMessage', 'Software Creado.'); // Guarda el mensaje flash
+    return res.redirect('/asignaturas/'+asignatura_id+'/software'); // Redirige a la misma página
+  } catch (error) {
+    console.error('Error al crear el software:', error);
+    res.status(500).send('Error al crear el software. Por favor, inténtalo de nuevo.');
+  }
+});
+
 // Ruta para eliminar un software
 router.get('/software/delete/:id', isAuthenticated, async (req, res) => {
   try {
