@@ -1,7 +1,11 @@
-Lista de Usuarios - Clave - Rol
+Lista de Usuarios - Clave - Rol:
+
 a@a.com - aaa - admin
+
 c@c.com - ccc - alumno
+
 b@b.com - bbb - profesor
+
 p@p.com - ppp - profesor
 
 
