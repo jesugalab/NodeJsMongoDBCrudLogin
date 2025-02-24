@@ -1,3 +1,15 @@
+Errores:
+- Creo que al borrar usuario desde vista no usuario (Alumno y Profesor) va a lista de usuarios.
+- 
+
+Nuevo:
+- subir json de usuarios y asignaturas
+- Sofware sube archivos
+- alumnos comunican sugerencias, quejas y errores. Y deciben correo los admin
+- ante cambio en asiganturas reciben correo los alumnos
+- mejorar la interface (responsive)
+
+
 Lista de Usuarios - Clave - Rol:
 
 a@a.com - aaa - admin
