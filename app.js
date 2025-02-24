@@ -6,7 +6,7 @@ const flash = require('connect-flash');
 const session = require('express-session');
 const passport = require('passport');
 const logger = require('morgan');
-
+const fileUpload = require('express-fileupload')
 
 
 var app = express();
@@ -34,6 +34,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 //app.use(express.static(path.join(__dirname, 'public')));
 app.use("/public", express.static(path.resolve(__dirname + '/public')));
+app.use("/files", express.static(path.join(__dirname, "files")));
 app.use(session({
   secret: 'mysecretsession',
   resave: false,
@@ -42,6 +43,7 @@ app.use(session({
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(fileUpload());
 // middlewares
 
 
