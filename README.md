@@ -3,11 +3,11 @@ Errores:
 - 
 
 Nuevo:
-- subir json de usuarios y asignaturas
-- Sofware sube archivos
-- alumnos comunican sugerencias, quejas y errores. Y deciben correo los admin
-- ante cambio en asiganturas reciben correo los alumnos
-- mejorar la interface (responsive)
+- Subir json de usuarios y asignaturas (/insertJson) Poner enlace en la cabecera de de admin 
+- Software sube archivos (modificar vistas lista de una asignatura, editar y añadir software)
+- Alumnos comunican sugerencias, quejas y errores. Y deciben correo los admin (/formularioSujerencias)  Poner enlace en la cabecera de de alumno 
+- Ante cambio en asiganturas reciben correo los alumnos (no tiene vistas)
+- Mejorar la interface (responsive)
 
 
 Lista de Usuarios - Clave - Rol:
