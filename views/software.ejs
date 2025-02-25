@@ -9,6 +9,7 @@
         <th>Descripcion</th>
         <th>Link</th>
         <th>Asignatura</th>
+        <th>Archivos</th>
         <% if (user.rol.toLowerCase() == "admin") { %> 
           <th>Operaciones</th>
         <% } %>
@@ -22,6 +23,27 @@
             <td><%= software.descripcion %></td>
             <td><a href="https://<%= software.link %>" target="_blank" rel="noopener noreferrer" style="text-decoration: none"><%= software.link %></a></td>
             <td><%= software.asignatura.nombre %> - <%= software.asignatura.curso %></td>
+            <td>
+              <% if (software.archivo) { 
+                  let partes = software.archivo.split("-_-"); // Divide el string en partes usando "-_-"
+                  
+                  let nombreFinal = "Sin nombre"; // Valor por defecto si no hay suficiente estructura
+                  
+                  if (partes.length >= 3) { // Si hay al menos dos "-_-"
+                      let nombreConExtension = partes.slice(2).join("-_-"); // Une desde el segundo "-_-"
+                      nombreFinal = nombreConExtension.substring(0, nombreConExtension.lastIndexOf(".")) || nombreConExtension; // Quita la extensión
+                  }
+              %>
+              
+                <a href="./files/<%= software.archivo %>" download="<%= nombreFinal %>">
+                  <%= nombreFinal %>
+                </a>
+              
+              <% } else { %>
+                <em>No file</em>
+              <% } %>
+            </td>
+            
             <% if (user.rol.toLowerCase() != "alumno" ) { %> 
               <td>
                 <div class="btn-group" role="group">

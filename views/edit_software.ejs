@@ -2,7 +2,7 @@
 
 <div class="col-md-7 mx-auto">
   <h2>Editar Software</h2>
-  <form action="/software/edit/<%= software._id %>" method="POST">
+  <form action="/software/edit/<%= software._id %>" method="POST" enctype="multipart/form-data">
     <div class="form-group">
       <label for="descripcion">Descripción:</label>
       <input type="text" class="form-control" id="descripcion" name="descripcion" value="<%= software.descripcion %>" required>
@@ -11,6 +11,31 @@
       <label for="link">Link:</label>
       <input type="text" class="form-control" id="link" name="link" value="<%= software.link %>" required>
     </div>
+    <div class="form-group">
+      <label for="file">Archivo:</label>
+      <% if (software.archivo) { 
+        let partes = software.archivo.split("-_-"); // Divide el string en partes usando "-_-"
+        
+        let nombreFinal = "Sin nombre"; // Valor por defecto si no hay suficiente estructura
+        
+        if (partes.length >= 3) { // Si hay al menos dos "-_-"
+            let nombreConExtension = partes.slice(2).join("-_-"); // Une desde el segundo "-_-"
+            nombreFinal = nombreConExtension.substring(0, nombreConExtension.lastIndexOf(".")) || nombreConExtension; // Quita la extensión
+        }
+      %>
+    
+      <a href="./files/<%= software.archivo %>" download="<%= nombreFinal %>">
+        <%= nombreFinal %>
+      </a>
+    
+      <% } else { %>
+        <em>No file</em>
+      <% } %>
+      <div>
+      <input id="archivo" class="form-control-file" type="file" name="archivo" value="<%= software.archivo%>" required>
+      </div>
+    </div>
+
     <div class="form-group">
       <label for="asignatura_id">Asignatura:</label>
       <select class="form-control" id="asignatura_id" name="asignatura_id" required>
