@@ -3,10 +3,10 @@ Errores:
 - 
 
 Nuevo:
-- Subir json de usuarios y asignaturas (/insertJson) Poner enlace en la cabecera de de admin 
+- Subir json de usuarios y asignaturas (/insertJson) Poner enlace en la cabecera de de admin -> Alvaro
 - Software sube archivos (modificar vistas lista de una asignatura, editar y añadir software)
 - Alumnos comunican sugerencias, quejas y errores. Y deciben correo los admin (/formularioSugerencias) Poner enlace en la cabecera de alumno 
-- Ante cambio en asiganturas reciben correo los alumnos (no tiene vistas)
+- Ante cambio en asiganturas reciben correo los alumnos (no tiene vistas) -> Felipe
 - Mejorar la interface (responsive)
 
 
