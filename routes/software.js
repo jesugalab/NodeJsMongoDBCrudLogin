@@ -64,11 +64,19 @@ router.get('/signupSoftware', isAuthenticated, async (req, res) => {
 router.post('/signupSoftware', isAuthenticated, async (req, res) => {
   const { descripcion, link, asignatura_id } = req.body;
 
+  let archivo=null;
+  if (req.files && req.files.archivo) {
+    let EDFile = req.files.archivo;
+      archivo = `${req.user._id}-_-${Date.now()}-_-${EDFile.name}`;
+      await  EDFile.mv(`./files/${req.user._id}-_-${Date.now()}-_-${EDFile.name}`);
+  }
+
   try {
     // Crea una nueva asignatura
     const nuevoSoftware = new Software({
       descripcion,
       link,
+      archivo,
       asignatura_id,
     });
 
@@ -87,13 +95,19 @@ router.post('/signupSoftware', isAuthenticated, async (req, res) => {
 router.post('/signupSoftware/:id', isAuthenticated, async (req, res) => {
   const { descripcion, link} = req.body;
   const asignatura_id = req.params.id;
-
+  let archivo=null;
+  if (req.files && req.files.archivo) {
+    let EDFile = req.files.archivo;
+      archivo = `${req.user._id}-_-${Date.now()}-_-${EDFile.name}`;
+      await  EDFile.mv(`./files/${req.user._id}-_-${Date.now()}-_-${EDFile.name}`);
+  }
 
   try {
     // Crea una nueva asignatura
     const nuevoSoftware = new Software({
       descripcion,
       link,
+      archivo,
       asignatura_id,
     });
 
@@ -114,7 +128,7 @@ router.get('/software/delete/:id', isAuthenticated, async (req, res) => {
 
     // Elimina la asignatura por su ID
     await Software.deleteOne({ _id: id });
-
+    
     // Redirige al usuario a la lista de asignaturas
     res.redirect('/software');
   } catch (error) {
@@ -161,9 +175,18 @@ router.post('/software/edit/:id', isAuthenticated, async (req, res) => {
     // Extraemos los valores enviados desde el formulario de edición
     const { descripcion, link, asignatura_id } = req.body;
 
+    let archivo=null;
+    if (req.files && req.files.archivo) {
+    let EDFile = req.files.archivo;
+      archivo = `${req.user._id}-_-${Date.now()}-_-${EDFile.name}`;
+      await  EDFile.mv(`./files/${req.user._id}-_-${Date.now()}-_-${EDFile.name}`);
+  }
+
+
+    console.log()
     // Actualiza el software en la base de datos usando el método updateOne
     // Utiliza el 'id' del software para encontrarlo y luego lo actualiza con los nuevos valores
-    await Software.updateOne({ _id: id }, { descripcion, link, asignatura_id });
+    await Software.updateOne({ _id: id }, { descripcion, link,archivo, asignatura_id });
 
     // Después de actualizar, se guarda un mensaje flash que indica que la actualización fue exitosa
     req.flash('successMessage', 'Software actualizado correctamente.');

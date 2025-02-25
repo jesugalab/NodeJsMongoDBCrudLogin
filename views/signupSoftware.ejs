@@ -5,10 +5,11 @@
     <div class="col-md-5">
         <div class="card">
             <div class="card-body">
-                <form action="/signupSoftware" method="POST">
+                <form action="/signupSoftware" method="POST" enctype="multipart/form-data">
                     <p>
                         <input type="text" name="descripcion" placeholder="descripcion" required>
                         <input type="text" name="link" placeholder="link" required>
+                        <input id="archivo" class="form-control-file" type="file" name="archivo">
                     </p>
                     <p>
                         <!-- Desplegable para seleccionar un estudio -->
