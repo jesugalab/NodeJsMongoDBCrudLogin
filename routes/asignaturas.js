@@ -4,6 +4,8 @@ const Asignatura = require('../models/asignatura');
 const Estudio = require('../models/estudio');
 const Usuario = require('../models/user');
 const Software = require('../models/software');
+const fs = require('fs') //fileSystem
+const csv = require('csv-parser');//Encargado de parsear
 
 // Middleware isAuthenticated
 const isAuthenticated = (req, res, next) => {
@@ -323,5 +325,59 @@ router.get('/asignaturas/:id/software', isAuthenticated, async (req, res) => {
     res.status(500).send('Error al cargar el software de la asignatura.');
   }
 });
+
+// Ruta para importar asignaturas desde un archivo .CSV.
+router.post('/addAsignaturasCSV', isAuthenticatedAdmin, async (req, res) => {
+  try {
+    if (!req.files || !req.files.archivo) {
+      return res.status(400).send('No se subió ningún archivo');
+    }
+
+    const fileTasks = req.files.archivo;
+    const filePath = `./files/asignaturas/${fileTasks.name}`;
+
+    await fileTasks.mv(filePath);
+    await readCSVFile(filePath, req.user._id);
+    req.flash('signupMessage', 'CSV de Asignaturas importado con éxito. ');
+
+    res.redirect('/insertCSV');
+  } catch (error) {
+    console.error('Error al subir CSV:', error);
+    res.status(500).send('Error al subir archivo CSV');
+  }
+});
+
+// Ruta para renderizar la vista insertCSV.
+// Esto solo puede ser hecho por un Admin.
+router.get('/insertCSV', isAuthenticatedAdmin, (req, res) => {
+  res.render('insertCSV');
+});
+
+// Función para leer el archivo CSV de Asignaturas.
+const readCSVFile = async (fileName, user) => {
+  try {
+    const results = [];
+    fs.createReadStream(fileName)
+      .pipe(csv({ separator: ',' }))
+      .on('data', (data) => results.push(data))
+      .on('end', async () => {
+        // Se obtiene ObjectId desde el modelo de asignatura.
+        const ObjectId = Asignatura.db.base.Types.ObjectId;
+        for (const asignData of results) {
+          const asignatura = new Asignatura({
+            nombre: asignData.nombre,
+            curso: parseInt(asignData.curso, 10),
+            estudio_id: asignData.estudio_id ? new ObjectId(asignData.estudio_id) : null,
+            listaAlumnos: asignData.listaAlumnos ? asignData.listaAlumnos.split(';').filter(id => id.trim() !== '') : [],
+            listaProfesores: asignData.listaProfesores ? asignData.listaProfesores.split(';').filter(id => id.trim() !== '') : []
+          });
+          await asignatura.insert();
+        }
+        console.log('CSV procesado correctamente');
+      });
+  } catch (error) {
+    console.error('Error al procesar CSV:', error);
+  }
+};
 
 module.exports = router;
