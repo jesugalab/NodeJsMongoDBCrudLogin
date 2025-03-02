@@ -74,6 +74,11 @@
                    
                   </div>
                 </li>
+                <% if (user.rol.toLowerCase() == "admin") {%>
+                <li class="nav-item">
+                  <a class="nav-link" href="/insertCSV"> Importar datos </a>
+                </li>
+                <% } %>
                 <li class="nav-item">
                   <a class="nav-link" href="/logout">Log out</a>
                 </li>        

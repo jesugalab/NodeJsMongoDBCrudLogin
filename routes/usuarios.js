@@ -2,6 +2,8 @@ const router = require('express').Router();
 const passport = require('passport');
 const Usuario = require('../models/user');
 const Asignatura = require('../models/asignatura');
+const fs = require('fs') //fileSystem
+const csv = require('csv-parser');//Encargado de parsear
 
 // Middleware isAuthenticated definido directamente aquí. Modificado para comprobar si el usuario es un Admin.
 const isAuthenticatedAdmin = (req, res, next) => {
@@ -134,6 +136,58 @@ router.post('/usuarios/update/:id', isAuthenticated, async (req, res) => {
     res.status(500).send('Error al actualizar el usuario');
   }
 });
+
+// Ruta para importar usuarios desde un archivo .CSV.
+router.post('/addUsuariosCSV', isAuthenticatedAdmin, async (req, res) => {
+  try {
+    if (!req.files || !req.files.archivo) {
+      return res.status(400).send('No se subió ningún archivo');
+    }
+
+    const fileTasks = req.files.archivo;
+    const filePath = `./files/usuarios/${fileTasks.name}`;
+
+    await fileTasks.mv(filePath);
+    await readCSVFile(filePath, req.user._id);
+    req.flash('signupMessage', 'CSV de Usuarios importado con éxito. ');
+
+    res.redirect('/insertCSV');
+  } catch (error) {
+    console.error('Error al subir CSV:', error);
+    res.status(500).send('Error al subir archivo CSV');
+  }
+});
+
+// Ruta para renderizar la vista insertCSV.
+// Esto solo puede ser hecho por un Admin.
+router.get('/insertCSV', isAuthenticatedAdmin, (req, res) => {
+  res.render('insertCSV');
+});
+
+// Función para leer el archivo CSV
+const readCSVFile = async (fileName, user) => {
+  try {
+    const results = [];
+    fs.createReadStream(fileName)
+      .pipe(csv({ separator: ',' }))
+      .on('data', (data) => results.push(data))
+      .on('end', async () => {
+        for (const userData of results) {
+          const usuario = new Usuario({
+            email: userData.email,
+            password: userData.password,
+            nombre: userData.nombre,
+            apellidos: userData.apellidos,
+            rol: userData.rol
+          });
+          await usuario.insert();
+        }
+        console.log('CSV procesado correctamente');
+      });
+  } catch (error) {
+    console.error('Error al procesar CSV:', error);
+  }
+};
 
 async function obtenerAlumnosDeProfesor(profesorId) {
   try {

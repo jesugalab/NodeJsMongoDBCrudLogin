@@ -1,0 +1,41 @@
+<% include partials/_header %>
+
+<div class="container d-flex flex-column align-items-center mt-3 style='width: 50%;'">
+      <!-- Upload CSV Usuarios -->
+      <div class="card mt-3 w-100">
+        <div class="card-body">
+          <h3 class="card-title">Upload CSV Usuarios </h3>
+          <form action="/addUsuariosCSV" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+              <label for="csvFile"><strong>Selecciona un CSV de Usuarios: </strong>&nbsp;&nbsp;&nbsp;&nbsp;</label>
+              <input id="csvFile" class="form-control-file" type="file" name="archivo" accept=".csv" required>
+            </div>
+            <button class="btn btn-primary btn-block mt-3" type="submit">Upload CSV</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Upload CSV Asignaturas -->
+      <div class="card mt-3 w-100">
+        <div class="card-body">
+          <h3 class="card-title">Upload CSV Asignaturas </h3>
+          <form action="/addAsignaturasCSV" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+              <label for="csvFile"><strong>Selecciona un CSV de Asignaturas: </strong>&nbsp;&nbsp;&nbsp;&nbsp;</label>
+              <input id="csvFile" class="form-control-file" type="file" name="archivo" accept=".csv" required>
+            </div>
+            <button class="btn btn-primary btn-block mt-3" type="submit">Upload CSV</button>
+          </form>
+        </div>
+      </div>  
+
+      <%if (signupMessage) {%>
+        <div class = "row justify-content-center mt3 w-100">
+          <div class = "col-md-5 text-center">
+            <p style="color:#FF0000;"><%= signupMessage %></p>
+          </div>
+        </div>
+      <% } %>
+</div>
+
+<% include partials/_footer %>
