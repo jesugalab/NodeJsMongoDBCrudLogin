@@ -1,23 +1,30 @@
 <% include partials/_header %>
 
-<div class="container mt-4">
-  <div class="card">
-    <div class="card-body"></div>
-      <h2>Editar Estudio</h2>
+<div class="container-fluid mt-4">
+  <div class="row">
+    <div class="col-lg-6 col-md-8 col-sm-10 mx-auto">
+      <div class="card">
+        <div class="card-body">
+          <h2 class="text-center mb-3">Editar Estudio</h2>
 
-      <form action="/estudios/edit/<%= estudio._id %>" method="POST">
-        <div class="mb-3">
-          <label class="form-label">Nombre</label>
-          <input type="text" class="form-control" name="nombre" value="<%= estudio.nombre %>" required>
-        </div>
+          <form action="/estudios/edit/<%= estudio._id %>" method="POST">
+            <div class="mb-3">
+              <label class="form-label">Nombre</label>
+              <input type="text" class="form-control" name="nombre" value="<%= estudio.nombre %>" required>
+            </div>
 
-        <div class="mb-3">
-          <label class="form-label">Tipo</label>
-          <input type="text" class="form-control" name="tipo" value="<%= estudio.tipo %>" required>
+            <div class="mb-3">
+              <label class="form-label">Tipo</label>
+              <input type="text" class="form-control" name="tipo" value="<%= estudio.tipo %>" required>
+            </div>
+
+            <div class="d-flex justify-content-between">
+              <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+              <a href="/estudios" class="btn btn-secondary">Cancelar</a>
+            </div>
+          </form>
         </div>
-        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-        <a href="/estudios" class="btn btn-secondary">Cancelar</a>
-      </form>
+      </div>
     </div>
   </div>
 </div>
