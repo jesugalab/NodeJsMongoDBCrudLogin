@@ -206,4 +206,134 @@ async function obtenerAlumnosDeProfesor(profesorId) {
     return [];
   }
 }
+
+// metodoa para redirigir cuando se Edita y se elimina desde la lista de alunmos y porfesores
+    // Método para eliminar usuarios.
+    router.get('/usuarios/deleteA/:id', isAuthenticatedAdmin, async (req, res, next) => {
+      let { id } = req.params;
+      await Usuario.findByIdAndDelete(id);
+      res.redirect('/alumnos');
+    });
+
+    
+   // Ruta GET para mostrar el formulario de edición de usuario
+   router.get('/usuarios/editA/:id', isAuthenticated, async (req, res) => {
+    try {
+      // Busca al usuario en la base de datos utilizando el ID proporcionado en los parámetros de la URL
+      const usuario = await Usuario.findById(req.params.id);
+  
+      // Si el usuario no existe, respondemos con un error 404
+      if (!usuario) {
+        return res.status(404).send('Usuario no encontrado');
+      }
+  
+      // Si el usuario es encontrado, se pasa el objeto 'usuario' a la vista 'edit_usuario'
+      // para mostrar el formulario con los datos actuales del usuario
+      res.render('edit_usuarioA', { usuario });
+    } catch (error) {
+      // Si ocurre un error durante la consulta o la renderización de la vista, se captura y se muestra en la consola
+      console.error(error);
+      // Respondemos con un error 500 si no se puede cargar el formulario
+      res.status(500).send('Error al cargar el formulario de edición');
+    }
+  });
+  
+  // Código para editar los usuarios
+  // Ruta POST para actualizar un usuario
+  router.post('/usuarios/updateA/:id', isAuthenticated, async (req, res) => {
+    try {
+      // Extrae los datos del formulario enviados por el usuario
+      const { nombre, apellidos, email, rol } = req.body;
+  
+      // Busca al usuario en la base de datos utilizando el ID proporcionado en los parámetros de la URL
+      const usuario = await Usuario.findById(req.params.id);
+  
+      // Si el usuario no existe, respondemos con un error 404
+      if (!usuario) {
+        return res.status(404).send('Usuario no encontrado');
+      }
+  
+      // Si el usuario es encontrado, se actualizan sus propiedades con los nuevos valores del formulario
+      usuario.nombre = nombre;
+      usuario.apellidos = apellidos;
+      usuario.email = email;
+      usuario.rol = rol;
+  
+      // Guardamos los cambios en la base de datos
+      await usuario.save();
+  
+      // Después de actualizar el usuario, se redirige a la lista de usuarios
+      res.redirect('/alumnos');
+    } catch (error) {
+      // Si ocurre un error durante la actualización, se captura y se muestra en la consola
+      console.error(error);
+      // Respondemos con un error 500 si no se puede actualizar el usuario
+      res.status(500).send('Error al actualizar el usuario');
+    }
+  });
+
+     // Método para eliminar usuarios.
+     router.get('/usuarios/deleteP/:id', isAuthenticatedAdmin, async (req, res, next) => {
+      let { id } = req.params;
+      await Usuario.findByIdAndDelete(id);
+      res.redirect('/profesores');
+    });
+  
+   // Ruta GET para mostrar el formulario de edición de usuario
+   router.get('/usuarios/editP/:id', isAuthenticated, async (req, res) => {
+    try {
+      // Busca al usuario en la base de datos utilizando el ID proporcionado en los parámetros de la URL
+      const usuario = await Usuario.findById(req.params.id);
+  
+      // Si el usuario no existe, respondemos con un error 404
+      if (!usuario) {
+        return res.status(404).send('Usuario no encontrado');
+      }
+  
+      // Si el usuario es encontrado, se pasa el objeto 'usuario' a la vista 'edit_usuario'
+      // para mostrar el formulario con los datos actuales del usuario
+      res.render('edit_usuarioP', { usuario });
+    } catch (error) {
+      // Si ocurre un error durante la consulta o la renderización de la vista, se captura y se muestra en la consola
+      console.error(error);
+      // Respondemos con un error 500 si no se puede cargar el formulario
+      res.status(500).send('Error al cargar el formulario de edición');
+    }
+  });
+  
+  // Código para editar los usuarios
+  // Ruta POST para actualizar un usuario
+  router.post('/usuarios/updateP/:id', isAuthenticated, async (req, res) => {
+    try {
+      // Extrae los datos del formulario enviados por el usuario
+      const { nombre, apellidos, email, rol } = req.body;
+  
+      // Busca al usuario en la base de datos utilizando el ID proporcionado en los parámetros de la URL
+      const usuario = await Usuario.findById(req.params.id);
+  
+      // Si el usuario no existe, respondemos con un error 404
+      if (!usuario) {
+        return res.status(404).send('Usuario no encontrado');
+      }
+  
+      // Si el usuario es encontrado, se actualizan sus propiedades con los nuevos valores del formulario
+      usuario.nombre = nombre;
+      usuario.apellidos = apellidos;
+      usuario.email = email;
+      usuario.rol = rol;
+  
+      // Guardamos los cambios en la base de datos
+      await usuario.save();
+  
+      // Después de actualizar el usuario, se redirige a la lista de usuarios
+      res.redirect('/profesores');
+    } catch (error) {
+      // Si ocurre un error durante la actualización, se captura y se muestra en la consola
+      console.error(error);
+      // Respondemos con un error 500 si no se puede actualizar el usuario
+      res.status(500).send('Error al actualizar el usuario');
+    }
+  });
+  
+
 module.exports = router;

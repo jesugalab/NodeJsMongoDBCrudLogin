@@ -1,0 +1,40 @@
+<% include partials/_header %>
+
+<div class="container">
+  <div class="row">
+    <!--FORM-->
+    <div class="col-md-6 mx-auto">
+      <div class="card">
+        <div class="card-body">
+          <h2>Editar Usuario</h2>
+          <form action="/usuarios/updateA/<%= usuario._id %>" method="post">
+            <div class="mb-3">
+              <label for="nombre" class="form-label">Nombre</label>
+              <input type="text" class="form-control" id="nombre" name="nombre" value="<%= usuario.nombre || '' %>" required>
+            </div>
+            <div class="mb-3">
+              <label for="apellidos" class="form-label">Apellidos</label>
+              <input type="text" class="form-control" id="apellidos" name="apellidos" value="<%= usuario.apellidos || '' %>" required>
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">Correo</label>
+              <input type="email" class="form-control" id="email" name="email" value="<%= usuario.email || '' %>" required>
+            </div>
+            <div class="mb-3">
+              <label for="rol" class="form-label">Rol</label>
+              <select class="form-select" id="rol" name="rol" required>
+                <option value="Admin" <%= usuario.rol === 'admin' ? 'selected' : '' %>>Admin</option>
+                <option value="Profesor" <%= usuario.rol === 'profesor' ? 'selected' : '' %>>Profesor</option>
+                <option value="Alumno" <%= usuario.rol === 'alumno' ? 'selected' : '' %>>Alumno</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+            <a href="/usuarios" class="btn btn-secondary">Cancelar</a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% include partials/_footer %>

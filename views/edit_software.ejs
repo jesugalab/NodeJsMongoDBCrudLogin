@@ -1,53 +1,63 @@
 <% include partials/_header %>
 
-<div class="col-md-7 mx-auto">
-  <h2>Editar Software</h2>
-  <form action="/software/edit/<%= software._id %>" method="POST" enctype="multipart/form-data">
-    <div class="form-group">
-      <label for="descripcion">Descripción:</label>
-      <input type="text" class="form-control" id="descripcion" name="descripcion" value="<%= software.descripcion %>" required>
-    </div>
-    <div class="form-group">
-      <label for="link">Link:</label>
-      <input type="text" class="form-control" id="link" name="link" value="<%= software.link %>" required>
-    </div>
-    <div class="form-group">
-      <label for="file">Archivo:</label>
-      <% if (software.archivo) { 
-        let partes = software.archivo.split("-_-"); // Divide el string en partes usando "-_-"
-        
-        let nombreFinal = "Sin nombre"; // Valor por defecto si no hay suficiente estructura
-        
-        if (partes.length >= 3) { // Si hay al menos dos "-_-"
-            let nombreConExtension = partes.slice(2).join("-_-"); // Une desde el segundo "-_-"
-            nombreFinal = nombreConExtension.substring(0, nombreConExtension.lastIndexOf(".")) || nombreConExtension; // Quita la extensión
-        }
-      %>
-    
-      <a href="./files/<%= software.archivo %>" download="<%= nombreFinal %>">
-        <%= nombreFinal %>
-      </a>
-    
-      <% } else { %>
-        <em>No file</em>
-      <% } %>
-      <div>
-      <input id="archivo" class="form-control-file" type="file" name="archivo" value="<%= software.archivo%>" required>
+<div class="container-fluid mt-4">
+  <div class="row">
+    <div class="col-lg-6 col-md-8 col-sm-10 mx-auto">
+      <div class="card">
+        <div class="card-body">
+          <h2 class="text-center mb-4">Editar Software</h2>
+
+          <form action="/software/edit/<%= software._id %>" method="POST" enctype="multipart/form-data">
+            <div class="mb-3">
+              <label for="descripcion" class="form-label">Descripción</label>
+              <input type="text" class="form-control" id="descripcion" name="descripcion" value="<%= software.descripcion %>" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="link" class="form-label">Link</label>
+              <input type="text" class="form-control" id="link" name="link" value="<%= software.link %>" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="archivo" class="form-label">Archivo</label>
+              <div>
+                <% if (software.archivo) { 
+                  let partes = software.archivo.split("-_-");
+                  let nombreFinal = "Archivo sin nombre";
+
+                  if (partes.length >= 3) { 
+                      let nombreConExtension = partes.slice(2).join("-_-");
+                      nombreFinal = nombreConExtension.substring(0, nombreConExtension.lastIndexOf(".")) || nombreConExtension;
+                  }
+                %>
+                  <p>Archivo actual: <a href="./files/<%= software.archivo %>" download="<%= nombreFinal %>"><%= nombreFinal %></a></p>
+                <% } else { %>
+                  <p><em>No hay archivo subido</em></p>
+                <% } %>
+              </div>
+              <input id="archivo" class="form-control" type="file" name="archivo">
+            </div>
+
+            <div class="mb-3">
+              <label for="asignatura_id" class="form-label">Asignatura</label>
+              <select class="form-control" id="asignatura_id" name="asignatura_id" required>
+                <% asignaturas.forEach(asignatura => { %>
+                  <option value="<%= asignatura._id %>" <%= software.asignatura_id && software.asignatura_id.toString() === asignatura._id.toString() ? 'selected' : '' %> >
+                    <%= asignatura.nombre %> - <%= asignatura.curso %>
+                  </option>
+                <% }) %>
+              </select>
+            </div>
+
+            <div class="d-flex justify-content-between mt-4">
+              <button type="submit" class="btn btn-success">Guardar cambios</button>
+              <a href="/software" class="btn btn-secondary">Cancelar</a>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
-
-    <div class="form-group">
-      <label for="asignatura_id">Asignatura:</label>
-      <select class="form-control" id="asignatura_id" name="asignatura_id" required>
-        <% asignaturas.forEach(asignatura => { %>
-          <option value="<%= asignatura._id %>" <%= software.asignatura_id && software.asignatura_id.toString() === asignatura._id.toString() ? 'selected' : '' %> >
-            <%= asignatura.nombre %> - <%= asignatura.curso %>
-          </option>
-        <% }) %>
-      </select>
-    </div>
-    <button type="submit" class="btn btn-success">Guardar cambios</button>
-  </form>
+  </div>
 </div>
 
 <% include partials/_footer %>
