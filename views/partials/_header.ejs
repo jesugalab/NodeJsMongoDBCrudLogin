@@ -6,6 +6,15 @@
     <!-- BOOTSTRAP CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <style>
+      .dropdown-menu {
+        width: 100%;
+        text-align: center;
+      }
+      .dropdown-item {
+        text-align: center;
+      }
+    </style>
   </head>
   <body>
     <!--Navbar-->
@@ -17,7 +26,7 @@
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
-          <div class="collapse navbar-collapse" id="navbarScroll">
+          <div class="collapse navbar-collapse  justify-content-center  mx-auto" id="navbarScroll">
             <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
               <% if (!user) { %>
                 <!-- si no esta logeado no muestra mas que el Tirulo  -->              
@@ -34,7 +43,7 @@
                      data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Insertar
                   </a>
-                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <div class="dropdown-menu text-center" aria-labelledby="navbarDropdown">
                     <%if (user.rol.toLowerCase() == "admin") {%>
                         <a class="dropdown-item" href="/signup">Añadir usuario</a>
                         <a class="dropdown-item" href="/signupEstudio">Añadir estudio</a>
@@ -55,7 +64,7 @@
                      data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Consultar 
                   </a>
-                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <div class="dropdown-menu text-center" aria-labelledby="navbarDropdown">
                     <%if (user.rol.toLowerCase() == "admin") {%>     
                       <a class="dropdown-item" href="/usuarios">Usuarios</a>
                       <a class="dropdown-item" href="/alumnos">Alumnos</a>
@@ -74,6 +83,11 @@
                    
                   </div>
                 </li>
+                <% if (user.rol.toLowerCase() == "alumno") {%>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/Enviar Sugerencia">Enviar Sugerencia</a>
+                  </li>
+                  <% } %>
                 <% if (user.rol.toLowerCase() == "admin") {%>
                 <li class="nav-item">
                   <a class="nav-link" href="/insertCSV"> Importar datos </a>
@@ -83,7 +97,7 @@
                   <a class="nav-link" href="/logout">Log out</a>
                 </li>        
               </ul>
-              <form action="/tasks/search" class="d-flex" method="get">
+              <form action="/tasks/search" class="d-flex mx-auto" method="get">
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                 <button class="btn btn-outline-light my-2 my-sm-0 mx-auto" type="submit">Buscar</button>
               </form>
