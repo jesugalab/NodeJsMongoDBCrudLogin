@@ -7,12 +7,15 @@
         <div class="col-md-5">
             <div class="card">
                 <div class="card-body">
-                    <form action="/signupSoftware/<%=asignatura._id%>" method="post">
+                    <form action="/signupSoftware/<%=asignatura._id%>" method="post" enctype="multipart/form-data">
                         <div class="form-group">
-                            <input class="form-control" type="text" name="link" placeholder="Title">
+                            <input class="form-control" type="text" name="link" placeholder="Enlace">
                         </div>
                         <div class="form-group">
-                            <textarea class="form-control" name="descripcion" cols="80" placeholder="Add a Description"></textarea>
+                            <textarea class="form-control" name="descripcion" cols="80" placeholder="Descripcion"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <input id="archivo" class="form-control-file" type="file" name="archivo">
                         </div>
                         <button class="btn btn-primary" type="submit">Add</button>
                     </form>
@@ -30,6 +33,7 @@
                                 <tr>
                                     <th>Descripción</th>
                                     <th>Enlace</th>
+                                    <th>Archivo</th>
                                     <%if (user.rol.toLowerCase() != "alumno") {%>     
                                     <th>Operaciones</th>
                                     <%}%>
@@ -41,6 +45,27 @@
                                     <tr>
                                         <td><%= sw.descripcion %></td>
                                         <td><a href="https://<%= sw.link %>" target="_blank"><%= sw.link %></a></td>
+                                        <td>
+                                            <% if (sw.archivo) { 
+                                                let partes = sw.archivo.split("-_-"); // Divide el string en partes usando "-_-"
+                                                
+                                                let nombreFinal = "Sin nombre"; // Valor por defecto si no hay suficiente estructura
+                                                
+                                                if (partes.length >= 3) { // Si hay al menos dos "-_-"
+                                                    let nombreConExtension = partes.slice(2).join("-_-"); // Une desde el segundo "-_-"
+                                                    nombreFinal = nombreConExtension.substring(0, nombreConExtension.lastIndexOf(".")) || nombreConExtension; // Quita la extensión
+                                                }
+                                            %>
+                                            
+                                              <a href="./files/<%= sw.archivo %>" download="<%= nombreFinal %>">
+                                                <%= nombreFinal %>
+                                              </a>
+                                            
+                                            <% } else { %>
+                                              <em>No file</em>
+                                            <% } %>
+                                          </td>                                          
+                                          
                                         <%if (user.rol.toLowerCase() != "alumno") {%>     
                                         <td>
                                             <div class="btn-group" role="group">

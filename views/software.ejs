@@ -1,45 +1,64 @@
 <% include partials/_header %>
 
-<div class="col-md-7 mx-auto">
-  <h2>Lista de Software</h2>
-  <table class="table table-bordered table-hover">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Descripcion</th>
-        <th>Link</th>
-        <th>Asignatura</th>
-        <% if (user.rol.toLowerCase() == "admin") { %> 
-          <th>Operaciones</th>
-        <% } %>
-      </tr>
-    </thead>
-    <tbody>
-      <% if (software.length > 0) { %>
-        <% software.forEach(software => { %>
+<div class="container-fluid px-2">
+  <div class="col-lg-10 col-md-12 mx-auto">
+    <h2 class="text-center mb-4">Lista de Software</h2>
+
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover text-center w-100">
+        <thead>
           <tr>
-            <td><%= software._id %></td>
-            <td><%= software.descripcion %></td>
-            <td><a href="https://<%= software.link %>" target="_blank" rel="noopener noreferrer" style="text-decoration: none"><%= software.link %></a></td>
-            <td><%= software.asignatura.nombre %> - <%= software.asignatura.curso %></td>
-            <% if (user.rol.toLowerCase() != "alumno" ) { %> 
-              <td>
-                <div class="btn-group" role="group">
-                  <a href="/software/edit/<%= software._id %>" class="btn btn-info btn-sm me-1" style="width: 60px;">Edit</a>
-                  <a href="/software/delete/<%= software._id %>" class="btn btn-danger btn-sm" style="width: 60px;">Delete</a>
-                </div>
-              </td>
+            <th>Descripción</th>
+            <th>Link</th>
+            <th>Asignatura</th>
+            <th>Archivos</th>
+            <% if (user.rol.toLowerCase() == "admin") { %>
+              <th>Operaciones</th>
             <% } %>
           </tr>
-        <% }) %>
-      <% } else { %>
-        <tr>
-          <td colspan="5" class="text-center">No hay Software registrado</td>
-        </tr>
-      <% } %>
-    </tbody>
-  </table>
+        </thead>
+        <tbody>
+          <% if (software.length > 0) { %>
+            <% software.forEach(software => { %>
+              <tr>
+                <td class="text-wrap"><%= software.descripcion %></td>
+                <td class="text-wrap" style="word-break: break-all;">
+                  <a href="https://<%= software.link %>" target="_blank" rel="noopener noreferrer">
+                    <%= software.link %>
+                  </a>
+                </td>
+                <td class="text-wrap"><%= software.asignatura.nombre %> - <%= software.asignatura.curso %></td>
+                <td class="text-wrap">
+                  <% if (software.archivo) { 
+                      let partes = software.archivo.split("-_-");
+                      let nombreFinal = (partes.length >= 3) ? partes.slice(2).join("-_-").split('.').slice(0, -1).join('.') : "Sin nombre";
+                  %>
+                    <a href="./files/<%= software.archivo %>" download="<%= nombreFinal %>">
+                      <%= nombreFinal %>
+                    </a>
+                  <% } else { %>
+                    <em>No file</em>
+                  <% } %>
+                </td>
+                <% if (user.rol.toLowerCase() != "alumno") { %>
+                  <td>
+                    <div class="d-flex justify-content-center">
+                      <a href="/software/edit/<%= software._id %>" class="btn btn-info btn-sm me-2">Editar</a>
+                      <a href="/software/delete/<%= software._id %>" class="btn btn-danger btn-sm">Borrar</a>
+                    </div>
+                  </td>
+                <% } %>
+              </tr>
+            <% }) %>
+          <% } else { %>
+            <tr>
+              <td colspan="5" class="text-center">No hay Software registrado</td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 
 <% include partials/_footer %>
-

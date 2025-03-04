@@ -1,46 +1,48 @@
 <% include partials/_header %>
 
-
-<div class="col-md-7 mx-auto">
-  <h2>Lista de Usuarios</h2>
-  <table class="table table-bordered table-hover">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Apellidos</th>
-        <th>Correo</th>
-        <th>Rol</th>
-        <% if (user.rol.toLowerCase() == "admin") { %> 
-          <th>Operaciones</th>
-        <% } %>
-      </tr>
-    </thead>
-    <tbody>
-      <% if (usuarios.length > 0) { %>
-        <% usuarios.forEach(usuario => { %>
+<div class="container-fluid px-2">
+  <div class="col-lg-8 col-md-10 col-sm-12 mx-auto">
+    <h2 class="text-center mb-4">Lista de Usuarios</h2>
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover text-center w-100">
+        <thead>
           <tr>
-            <td><%= usuario._id %></td>
-            <td><%= usuario.nombre %></td>
-            <td><%= usuario.apellidos %></td>
-            <td><%= usuario.email %></td>
-            <td><%= usuario.rol %></td>
-            <td>
-              <div class="btn-group" role="group">
-                <a href="/usuarios/edit/<%= usuario._id %>" class="btn btn-info btn-sm me-1" style="width: 60px;">Edit</a>
-                <a href="/usuarios/delete/<%= usuario._id %>" class="btn btn-danger btn-sm" style="width: 60px;">Delete</a>
-              </div>
-            </td>
+            <th>Nombre</th>
+            <th>Apellidos</th>
+            <th>Correo</th>
+            <th>Rol</th>
+            <% if (user.rol.toLowerCase() == "admin") { %> 
+              <th>Acciones</th>
+            <% } %>
           </tr>
-        <% }) %>
-      <% } else { %>
-        <tr>
-          <td colspan="6" class="text-center">No hay usuarios registrados</td>
-        </tr>
-      <% } %>
-    </tbody>
-  </table>
+        </thead>
+        <tbody>
+          <% if (usuarios.length > 0) { %>
+            <% usuarios.forEach(usuario => { %>
+              <tr>
+                <td><%= usuario.nombre %></td>
+                <td><%= usuario.apellidos %></td>
+                <td><%= usuario.email %></td>
+                <td><%= usuario.rol %></td>
+                <% if (user.rol.toLowerCase() == "admin") { %>
+                  <td>
+                    <div class="d-flex justify-content-center">
+                      <a href="/usuarios/edit/<%= usuario._id %>" class="btn btn-info btn-sm me-2">Editar</a>
+                      <a href="/usuarios/delete/<%= usuario._id %>" class="btn btn-danger btn-sm">Borrar</a>
+                    </div>
+                  </td>
+                <% } %>
+              </tr>
+            <% }) %>
+          <% } else { %>
+            <tr>
+              <td colspan="5" class="text-center">No hay usuarios registrados</td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
-
 
 <% include partials/_footer %>

@@ -9,6 +9,7 @@
     "bcrypt-nodejs": "^0.0.3",
     "connect-flash": "^0.1.1",
     "cookie-parser": "~1.4.4",
+    "csv-parser": "^3.2.0",
     "debug": "~2.6.9",
     "ejs": "~2.6.1",
     "express": "~4.16.1",

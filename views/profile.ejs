@@ -10,18 +10,7 @@
         </tr>
       </thead>
       <tbody>
-          <tr>
-            <th>ID</th>
-            <td><%= user._id%></td>
-          </tr>
-          <tr>
-            <th>Email</th>
-            <td><%= user.email%></td>
-          </tr>          
-          <tr>
-            <th>Password</th>
-            <td><%= user.password%></td>
-          </tr>
+
           <tr>
             <th>Nombre</th>
             <td><%= user.nombre%></td>
@@ -34,7 +23,10 @@
             <th>Rol</th>
             <td><%= user.rol%></td>
           </tr>
-
+          <tr>
+            <th>Email</th>
+            <td><%= user.email%></td>
+          </tr>          
       </tbody>
     </table>     
       <% if (signupMessage) { %>

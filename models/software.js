@@ -12,6 +12,9 @@ const softwareSchema = Schema({
     type: String,
     required: true
   },
+  archivo: {
+    type: String
+  },
 
   asignatura_id:  {type: mongoose.Schema.Types.ObjectId, ref:'listaSofware'}
 

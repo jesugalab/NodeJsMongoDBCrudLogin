@@ -2,6 +2,8 @@ const router = require('express').Router();
 const passport = require('passport');
 const Usuario = require('../models/user');
 const Asignatura = require('../models/asignatura');
+const fs = require('fs') //fileSystem
+const csv = require('csv-parser');//Encargado de parsear
 
 // Middleware isAuthenticated definido directamente aquí. Modificado para comprobar si el usuario es un Admin.
 const isAuthenticatedAdmin = (req, res, next) => {
@@ -135,6 +137,58 @@ router.post('/usuarios/update/:id', isAuthenticated, async (req, res) => {
   }
 });
 
+// Ruta para importar usuarios desde un archivo .CSV.
+router.post('/addUsuariosCSV', isAuthenticatedAdmin, async (req, res) => {
+  try {
+    if (!req.files || !req.files.archivo) {
+      return res.status(400).send('No se subió ningún archivo');
+    }
+
+    const fileTasks = req.files.archivo;
+    const filePath = `./files/usuarios/${fileTasks.name}`;
+
+    await fileTasks.mv(filePath);
+    await readCSVFile(filePath, req.user._id);
+    req.flash('signupMessage', 'CSV de Usuarios importado con éxito. ');
+
+    res.redirect('/insertCSV');
+  } catch (error) {
+    console.error('Error al subir CSV:', error);
+    res.status(500).send('Error al subir archivo CSV');
+  }
+});
+
+// Ruta para renderizar la vista insertCSV.
+// Esto solo puede ser hecho por un Admin.
+router.get('/insertCSV', isAuthenticatedAdmin, (req, res) => {
+  res.render('insertCSV');
+});
+
+// Función para leer el archivo CSV
+const readCSVFile = async (fileName, user) => {
+  try {
+    const results = [];
+    fs.createReadStream(fileName)
+      .pipe(csv({ separator: ',' }))
+      .on('data', (data) => results.push(data))
+      .on('end', async () => {
+        for (const userData of results) {
+          const usuario = new Usuario({
+            email: userData.email,
+            password: userData.password,
+            nombre: userData.nombre,
+            apellidos: userData.apellidos,
+            rol: userData.rol
+          });
+          await usuario.insert();
+        }
+        console.log('CSV procesado correctamente');
+      });
+  } catch (error) {
+    console.error('Error al procesar CSV:', error);
+  }
+};
+
 async function obtenerAlumnosDeProfesor(profesorId) {
   try {
     // 1. Buscar las asignaturas donde el profesor está asignado
@@ -152,4 +206,134 @@ async function obtenerAlumnosDeProfesor(profesorId) {
     return [];
   }
 }
+
+// metodoa para redirigir cuando se Edita y se elimina desde la lista de alunmos y porfesores
+    // Método para eliminar usuarios.
+    router.get('/usuarios/deleteA/:id', isAuthenticatedAdmin, async (req, res, next) => {
+      let { id } = req.params;
+      await Usuario.findByIdAndDelete(id);
+      res.redirect('/alumnos');
+    });
+
+    
+   // Ruta GET para mostrar el formulario de edición de usuario
+   router.get('/usuarios/editA/:id', isAuthenticated, async (req, res) => {
+    try {
+      // Busca al usuario en la base de datos utilizando el ID proporcionado en los parámetros de la URL
+      const usuario = await Usuario.findById(req.params.id);
+  
+      // Si el usuario no existe, respondemos con un error 404
+      if (!usuario) {
+        return res.status(404).send('Usuario no encontrado');
+      }
+  
+      // Si el usuario es encontrado, se pasa el objeto 'usuario' a la vista 'edit_usuario'
+      // para mostrar el formulario con los datos actuales del usuario
+      res.render('edit_usuarioA', { usuario });
+    } catch (error) {
+      // Si ocurre un error durante la consulta o la renderización de la vista, se captura y se muestra en la consola
+      console.error(error);
+      // Respondemos con un error 500 si no se puede cargar el formulario
+      res.status(500).send('Error al cargar el formulario de edición');
+    }
+  });
+  
+  // Código para editar los usuarios
+  // Ruta POST para actualizar un usuario
+  router.post('/usuarios/updateA/:id', isAuthenticated, async (req, res) => {
+    try {
+      // Extrae los datos del formulario enviados por el usuario
+      const { nombre, apellidos, email, rol } = req.body;
+  
+      // Busca al usuario en la base de datos utilizando el ID proporcionado en los parámetros de la URL
+      const usuario = await Usuario.findById(req.params.id);
+  
+      // Si el usuario no existe, respondemos con un error 404
+      if (!usuario) {
+        return res.status(404).send('Usuario no encontrado');
+      }
+  
+      // Si el usuario es encontrado, se actualizan sus propiedades con los nuevos valores del formulario
+      usuario.nombre = nombre;
+      usuario.apellidos = apellidos;
+      usuario.email = email;
+      usuario.rol = rol;
+  
+      // Guardamos los cambios en la base de datos
+      await usuario.save();
+  
+      // Después de actualizar el usuario, se redirige a la lista de usuarios
+      res.redirect('/alumnos');
+    } catch (error) {
+      // Si ocurre un error durante la actualización, se captura y se muestra en la consola
+      console.error(error);
+      // Respondemos con un error 500 si no se puede actualizar el usuario
+      res.status(500).send('Error al actualizar el usuario');
+    }
+  });
+
+     // Método para eliminar usuarios.
+     router.get('/usuarios/deleteP/:id', isAuthenticatedAdmin, async (req, res, next) => {
+      let { id } = req.params;
+      await Usuario.findByIdAndDelete(id);
+      res.redirect('/profesores');
+    });
+  
+   // Ruta GET para mostrar el formulario de edición de usuario
+   router.get('/usuarios/editP/:id', isAuthenticated, async (req, res) => {
+    try {
+      // Busca al usuario en la base de datos utilizando el ID proporcionado en los parámetros de la URL
+      const usuario = await Usuario.findById(req.params.id);
+  
+      // Si el usuario no existe, respondemos con un error 404
+      if (!usuario) {
+        return res.status(404).send('Usuario no encontrado');
+      }
+  
+      // Si el usuario es encontrado, se pasa el objeto 'usuario' a la vista 'edit_usuario'
+      // para mostrar el formulario con los datos actuales del usuario
+      res.render('edit_usuarioP', { usuario });
+    } catch (error) {
+      // Si ocurre un error durante la consulta o la renderización de la vista, se captura y se muestra en la consola
+      console.error(error);
+      // Respondemos con un error 500 si no se puede cargar el formulario
+      res.status(500).send('Error al cargar el formulario de edición');
+    }
+  });
+  
+  // Código para editar los usuarios
+  // Ruta POST para actualizar un usuario
+  router.post('/usuarios/updateP/:id', isAuthenticated, async (req, res) => {
+    try {
+      // Extrae los datos del formulario enviados por el usuario
+      const { nombre, apellidos, email, rol } = req.body;
+  
+      // Busca al usuario en la base de datos utilizando el ID proporcionado en los parámetros de la URL
+      const usuario = await Usuario.findById(req.params.id);
+  
+      // Si el usuario no existe, respondemos con un error 404
+      if (!usuario) {
+        return res.status(404).send('Usuario no encontrado');
+      }
+  
+      // Si el usuario es encontrado, se actualizan sus propiedades con los nuevos valores del formulario
+      usuario.nombre = nombre;
+      usuario.apellidos = apellidos;
+      usuario.email = email;
+      usuario.rol = rol;
+  
+      // Guardamos los cambios en la base de datos
+      await usuario.save();
+  
+      // Después de actualizar el usuario, se redirige a la lista de usuarios
+      res.redirect('/profesores');
+    } catch (error) {
+      // Si ocurre un error durante la actualización, se captura y se muestra en la consola
+      console.error(error);
+      // Respondemos con un error 500 si no se puede actualizar el usuario
+      res.status(500).send('Error al actualizar el usuario');
+    }
+  });
+  
+
 module.exports = router;
