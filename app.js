@@ -21,6 +21,7 @@ const asignaturasRouter = require('./routes/asignaturas');
 const estudiosRoutes = require('./routes/estudios');
 const usuariosRoutes = require('./routes/usuarios');
 const softwareRoutes = require('./routes/software');
+const solicitudRoutes = require('./routes/solicitud');
 
 // view engine setup
 app.set('port', process.env.PORT || 3000);
@@ -62,6 +63,7 @@ app.use('/', asignaturasRouter);
 app.use('/', estudiosRoutes);
 app.use('/', usuariosRoutes);
 app.use('/', softwareRoutes);
+app.use('/', solicitudRoutes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
