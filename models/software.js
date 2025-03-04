@@ -32,6 +32,7 @@ softwareSchema.methods.insert= async function () {
   .catch(error => console.log(error));
 };
 
+
 softwareSchema.methods.update= async (id, software) => {
   const Software = mongoose.model("listaSoftware", softwareSchema);
   await Software.updateOne({_id: id}, software)

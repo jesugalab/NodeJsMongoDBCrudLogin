@@ -4,6 +4,17 @@ const Asignatura = require('../models/asignatura');
 const Estudio = require('../models/estudio');
 const Usuario = require('../models/user');
 const Software = require('../models/software');
+const nodemailer = require('nodemailer');
+const mongoose = require('mongoose'); // Importa Mongoose
+const { enviarCorreo } = require('../utils/email'); // Importar desde utils/email.js
+
+const asignaturaSchema = new mongoose.Schema({
+  nombre: String,
+  curso: Number,
+  estudio_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Estudio' },
+  listaAlumnos: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Usuario' }], // Referencia al modelo Usuario
+  listaProfesores: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Usuario' }] // Referencia al modelo Usuario
+});
 
 // Middleware isAuthenticated
 const isAuthenticated = (req, res, next) => {
@@ -118,7 +129,7 @@ router.get('/signupAsignaturaAlumno', isAuthenticated, async (req, res) => {
       res.status(500).send('Error al cargar usuarios o asignaturas.');
   }
 });
-// Ruta para procesar el formulario de añadir asignaturas a un alumno
+/*// Ruta para procesar el formulario de añadir asignaturas a un alumno y notificar al alumno
 router.post('/signupAsignaturaAlumno', isAuthenticated, async (req, res) => {
   const { usuario_id, asignatura_id } = req.body;
 
@@ -144,7 +155,46 @@ router.post('/signupAsignaturaAlumno', isAuthenticated, async (req, res) => {
     res.status(500).send('Error al matricular al alumno.');
   }
 });
+*/
 
+// Ruta para procesar el formulario de añadir asignaturas a un alumno y notificar al alumno
+router.post('/signupAsignaturaAlumno', isAuthenticated, async (req, res) => {
+  const { usuario_id, asignatura_id } = req.body;
+
+  try {
+    const asignatura = await Asignatura.findById(asignatura_id);
+    if (!asignatura) {
+      console.error("La asignatura no existe.");
+      res.status(500).send('Error al matricular al alumno.');
+    } else {
+      const index = asignatura.listaAlumnos.indexOf(usuario_id);
+      if (index !== -1) {
+        asignatura.listaAlumnos.splice(index, 1);
+        req.flash('signupMessage', 'Alumno Eliminado de la Asignatura.');
+
+        // Notificar al alumno
+        const alumno = await Usuario.findById(usuario_id);
+        if (alumno) {
+          await enviarCorreo(alumno.email, 'Eliminado de Asignatura', `Has sido eliminado de la asignatura "${asignatura.nombre}".`);
+        }
+      } else {
+        asignatura.listaAlumnos.push(usuario_id);
+        req.flash('signupMessage', 'Alumno Matriculado en la Asignatura.');
+
+        // Notificar al alumno
+        const alumno = await Usuario.findById(usuario_id);
+        if (alumno) {
+          await enviarCorreo(alumno.email, 'Matriculado en Asignatura', `Has sido matriculado en la asignatura "${asignatura.nombre}".`);
+        }
+      }
+      await asignatura.save();
+      return res.redirect('/signupAsignaturaAlumno');
+    }
+  } catch (error) {
+    console.error('Error al matricular al alumno:', error);
+    res.status(500).send('Error al matricular al alumno.');
+  }
+});
 // Ruta para agregar asignaturas a un profesor
 router.get('/signupAsignaturaProfesor', isAuthenticated, async (req, res) => {
   try {
@@ -299,6 +349,7 @@ router.post('/asignaturas/edit/:id', isAuthenticatedAdmin, async (req, res) => {
     res.status(500).send('Error al actualizar la asignatura.'); // Responde con un error 500 en caso de fallo
   }
 });
+
 // Ruta para mostrar el software asociado a una asignatura
 router.get('/asignaturas/:id/software', isAuthenticated, async (req, res) => {
   try {
