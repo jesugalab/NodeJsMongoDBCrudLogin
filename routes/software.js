@@ -65,19 +65,18 @@ router.get('/signupSoftware', isAuthenticated, async (req, res) => {
 router.post('/signupSoftware', isAuthenticated, async (req, res) => {
   const { descripcion, link, asignatura_id } = req.body;
 
-  let archivo=null;
+  let archivo = null;
   if (req.files && req.files.archivo) {
     let EDFile = req.files.archivo;
-      archivo = `${req.user._id}-_-${Date.now()}-_-${EDFile.name}`;
-      await  EDFile.mv(`./files/${req.user._id}-_-${Date.now()}-_-${EDFile.name}`);
+    archivo = `${req.user._id}-_-${Date.now()}-_-${EDFile.name}`;
+    await EDFile.mv(`./files/${req.user._id}-_-${Date.now()}-_-${EDFile.name}`);
   }
 
   try {
-
     // Obtener la asignatura a la que se añadió el software
     const asignatura = await Asignatura.findById(asignatura_id);
 
-    // Crea una nueva asignatura
+    // Crear el software en la base de datos
     const nuevoSoftware = new Software({
       descripcion,
       link,
@@ -85,6 +84,7 @@ router.post('/signupSoftware', isAuthenticated, async (req, res) => {
       asignatura_id,
     });
 
+    await nuevoSoftware.save();
 
     if (asignatura) {
       console.log(`Alumnos en la asignatura ${asignatura.nombre}:`, asignatura.listaAlumnos); // Verifica los alumnos
@@ -111,28 +111,21 @@ router.post('/signupSoftware/:id', isAuthenticated, async (req, res) => {
   const { descripcion, link } = req.body;
   const asignatura_id = req.params.id;
 
-
-  try {
-    // Crear el software en la base de datos
-    const nuevoSoftware = new Software({ descripcion, link, asignatura_id });
-
-  let archivo=null;
+  let archivo = null;
   if (req.files && req.files.archivo) {
     let EDFile = req.files.archivo;
-      archivo = `${req.user._id}-_-${Date.now()}-_-${EDFile.name}`;
-      await  EDFile.mv(`./files/${req.user._id}-_-${Date.now()}-_-${EDFile.name}`);
+    archivo = `${req.user._id}-_-${Date.now()}-_-${EDFile.name}`;
+    await EDFile.mv(`./files/${req.user._id}-_-${Date.now()}-_-${EDFile.name}`);
   }
 
   try {
-    // Crea una nueva asignatura
+    // Crear el software en la base de datos
     const nuevoSoftware = new Software({
       descripcion,
       link,
       archivo,
       asignatura_id,
     });
-
-    // Guarda el software en la base de datos
 
     await nuevoSoftware.save();
 
@@ -141,18 +134,6 @@ router.post('/signupSoftware/:id', isAuthenticated, async (req, res) => {
 
     if (asignatura) {
       console.log(`Alumnos en la asignatura ${asignatura.nombre}:`, asignatura.listaAlumnos); // Verifica los alumnos
-
-      // Crear una notificación para cada alumno de la asignatura
-      const notificaciones = asignatura.listaAlumnos.map(alumnoId => {
-        return new Notificacion({
-          mensaje: `Se ha añadido nuevo software a la asignatura ${asignatura.nombre}`,
-          usuario_id: alumnoId,
-          asignatura_id: asignatura._id
-        });
-      });
-
-      // Guardar las notificaciones en la base de datos
-      await Notificacion.insertMany(notificaciones);
 
       // Enviar correos electrónicos a los alumnos
       const alumnos = await Usuario.find({ _id: { $in: asignatura.listaAlumnos } });
@@ -180,8 +161,6 @@ router.get('/software/delete/:id', isAuthenticated, async (req, res) => {
     await Software.deleteOne({ _id: id });
 
     // Redirige al usuario a la lista de software
-    
-    // Redirige al usuario a la lista de asignaturas
     res.redirect('/software');
   } catch (error) {
     console.error('Error al eliminar el software:', error);
@@ -219,23 +198,15 @@ router.post('/software/edit/:id', isAuthenticated, async (req, res) => {
     const { id } = req.params;
     const { descripcion, link, asignatura_id } = req.body;
 
+    let archivo = null;
+    if (req.files && req.files.archivo) {
+      let EDFile = req.files.archivo;
+      archivo = `${req.user._id}-_-${Date.now()}-_-${EDFile.name}`;
+      await EDFile.mv(`./files/${req.user._id}-_-${Date.now()}-_-${EDFile.name}`);
+    }
 
     // Actualiza el software en la base de datos
-    await Software.updateOne({ _id: id }, { descripcion, link, asignatura_id });
-
-    let archivo=null;
-    if (req.files && req.files.archivo) {
-    let EDFile = req.files.archivo;
-      archivo = `${req.user._id}-_-${Date.now()}-_-${EDFile.name}`;
-      await  EDFile.mv(`./files/${req.user._id}-_-${Date.now()}-_-${EDFile.name}`);
-  }
-
-
-    console.log()
-    // Actualiza el software en la base de datos usando el método updateOne
-    // Utiliza el 'id' del software para encontrarlo y luego lo actualiza con los nuevos valores
-    await Software.updateOne({ _id: id }, { descripcion, link,archivo, asignatura_id });
-
+    await Software.updateOne({ _id: id }, { descripcion, link, archivo, asignatura_id });
 
     // Guarda un mensaje flash de éxito
     req.flash('successMessage', 'Software actualizado correctamente.');
