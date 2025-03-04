@@ -3,7 +3,6 @@ const Solicitud = require('../models/solicitud');
 const nodemailer = require('nodemailer');
 const Usuario = require('../models/user');
 const { enviarCorreo } = require('../utils/email');
-const nodemailer = require('nodemailer');
 const mongoose = require('mongoose'); // Importa Mongoose
 // Este middleware verifica si el usuario está autenticado. Si lo está, permite que la solicitud continúe; si no, redirige al inicio.
 const isAuthenticated = (req, res, next) => {
@@ -16,24 +15,22 @@ const isAuthenticated = (req, res, next) => {
 // Esta función asíncrona busca todos los usuarios con rol de administrador, obtiene los detalles completos de la solicitud, 
 //configura un transporter de nodemailer, y envía un correo electrónico a cada administrador.
 async function notificarAdmins(solicitud) {
-    const admins = await Usuario.find({ rol: 'Admin' });
-    console.log('Administradores encontrados:', admins.toString());
-  
-    if (admins && admins.length > 0) {
-      console.log('Primer administrador encontrado:', admins[0]);
-    } else {
-      console.log('No se encontraron administradores.');
-    }
+    console.log('Iniciando notificación a admins');
+    const admins = await Usuario.find({ rol: 'Admin' });//busaca los admins
+    console.log('Administradores encontrados:', admins);
   
     const solicitudCompleta = await Solicitud.findById(solicitud._id).populate('usuario');
+    console.log('Solicitud completa:', solicitudCompleta);
   
     for (let admin of admins) {
+      console.log('Estructura del administrador:', admin); // Log para verificar la estructura
+  
       try {
-        console.log(`Enviando correo a: ${admin.email}`);
+        console.log(`Enviando correo a: ${admin.email}`); // Verifica aquí
         await enviarCorreo(
-          admin.email,
-          `Nueva solicitud: ${solicitudCompleta.tipo}`,
-          `Se ha recibido una nueva ${solicitudCompleta.tipo} de ${solicitudCompleta.usuario.nombre}. Contenido: ${solicitudCompleta.contenido}`
+          admin.email, 
+          ` ${solicitudCompleta.tipo}`,
+          ` ${solicitudCompleta.contenido}\nSaludos, ${solicitudCompleta.usuario.nombre}`
         );
         console.log(`Correo enviado correctamente a ${admin.email}`);
       } catch (error) {
@@ -62,11 +59,11 @@ router.post('/enviarSugerencia', isAuthenticated, async (req, res) => {
       await notificarAdmins(nuevaSolicitud);
   
       req.flash('success_msg', 'Solicitud enviada correctamente');
-      res.redirect('/profile');
+      res.redirect('/profile'); //redirección al perfil
     } catch (error) {
       console.error('Error al crear solicitud:', error);
       req.flash('error_msg', 'Error al enviar la solicitud');
-      res.redirect('/profile');
+      res.redirect('/profile'); // redirección al perfil
     }
   });
 
