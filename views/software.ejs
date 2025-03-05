@@ -30,10 +30,11 @@
                 <td class="text-wrap"><%= software.asignatura.nombre %> - <%= software.asignatura.curso %></td>
                 <td class="text-wrap">
                   <% if (software.archivo) { 
-                      let partes = software.archivo.split("-_-");
-                      let nombreFinal = (partes.length >= 3) ? partes.slice(2).join("-_-").split('.').slice(0, -1).join('.') : "Sin nombre";
+                    let partes = software.archivo.split("-_-"); // Divide el string en partes usando "-_-"
+                    let nombreConExtension = partes.slice(2).join("-_-"); // Une desde el segundo "-_-"
+                    let nombreFinal = (partes.length >= 3) ? partes.slice(2).join("-_-").split('.').slice(0, -1).join('.') : "Sin nombre";
                   %>
-                    <a href="./files/<%= software.archivo %>" download="<%= nombreFinal %>">
+                    <a href="./files/<%= software.archivo %>" download="<%= nombreConExtension %>">
                       <%= nombreFinal %>
                     </a>
                   <% } else { %>

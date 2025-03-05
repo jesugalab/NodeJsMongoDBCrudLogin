@@ -48,16 +48,10 @@
                                         <td>
                                             <% if (sw.archivo) { 
                                                 let partes = sw.archivo.split("-_-"); // Divide el string en partes usando "-_-"
-                                                
-                                                let nombreFinal = "Sin nombre"; // Valor por defecto si no hay suficiente estructura
-                                                
-                                                if (partes.length >= 3) { // Si hay al menos dos "-_-"
                                                     let nombreConExtension = partes.slice(2).join("-_-"); // Une desde el segundo "-_-"
-                                                    nombreFinal = nombreConExtension.substring(0, nombreConExtension.lastIndexOf(".")) || nombreConExtension; // Quita la extensión
-                                                }
-                                            %>
-                                            
-                                              <a href="./files/<%= sw.archivo %>" download="<%= nombreFinal %>">
+                                                    let nombreFinal = (partes.length >= 3) ? partes.slice(2).join("-_-").split('.').slice(0, -1).join('.') : "Sin nombre";
+                                            %> 
+                                              <a href="/files/<%= sw.archivo %>" download="<%= nombreConExtension %>">
                                                 <%= nombreFinal %>
                                               </a>
                                             
